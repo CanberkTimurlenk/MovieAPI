@@ -12,6 +12,20 @@ namespace Repositories.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "AwardTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AwardTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Genres",
                 columns: table => new
                 {
@@ -72,9 +86,10 @@ namespace Repositories.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ReleaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ReleaseDate = table.Column<DateTime>(type: "date", nullable: false),
                     DurationAsMinute = table.Column<int>(type: "int", nullable: false),
-                    IsInTheaters = table.Column<bool>(type: "bit", nullable: false)
+                    IsInTheaters = table.Column<bool>(type: "bit", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "date", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -117,6 +132,32 @@ namespace Repositories.Migrations
                         name: "FK_GenreMovieRole_MovieRoles_MovieRolesId",
                         column: x => x.MovieRolesId,
                         principalTable: "MovieRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Awards",
+                columns: table => new
+                {
+                    Year = table.Column<int>(type: "int", nullable: false),
+                    AwardTypeId = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MovieId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Awards", x => new { x.Year, x.AwardTypeId });
+                    table.ForeignKey(
+                        name: "FK_Awards_AwardTypes_AwardTypeId",
+                        column: x => x.AwardTypeId,
+                        principalTable: "AwardTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Awards_Movies_MovieId",
+                        column: x => x.MovieId,
+                        principalTable: "Movies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -199,6 +240,7 @@ namespace Repositories.Migrations
                 {
                     MovieId = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Synopsis = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Budget = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Revenue = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
@@ -262,6 +304,16 @@ namespace Repositories.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Awards_AwardTypeId",
+                table: "Awards",
+                column: "AwardTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Awards_MovieId",
+                table: "Awards",
+                column: "MovieId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_GenreMovie_MoviesId",
                 table: "GenreMovie",
                 column: "MoviesId");
@@ -296,6 +348,9 @@ namespace Repositories.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Awards");
+
+            migrationBuilder.DropTable(
                 name: "GenreMovie");
 
             migrationBuilder.DropTable(
@@ -315,6 +370,9 @@ namespace Repositories.Migrations
 
             migrationBuilder.DropTable(
                 name: "MovieRolePerson");
+
+            migrationBuilder.DropTable(
+                name: "AwardTypes");
 
             migrationBuilder.DropTable(
                 name: "Genres");

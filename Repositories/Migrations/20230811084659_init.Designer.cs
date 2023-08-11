@@ -12,7 +12,7 @@ using Repositories.EFCore;
 namespace Repositories.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    [Migration("20230809181307_init")]
+    [Migration("20230811084659_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -24,6 +24,49 @@ namespace Repositories.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Entities.Award", b =>
+                {
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AwardTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Year", "AwardTypeId");
+
+                    b.HasIndex("AwardTypeId");
+
+                    b.HasIndex("MovieId");
+
+                    b.ToTable("Awards");
+                });
+
+            modelBuilder.Entity("Entities.AwardType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Name")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AwardTypes");
+                });
 
             modelBuilder.Entity("Entities.Genre", b =>
                 {
@@ -89,8 +132,11 @@ namespace Repositories.Migrations
                     b.Property<bool>("IsInTheaters")
                         .HasColumnType("bit");
 
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("date");
+
                     b.Property<DateTime>("ReleaseDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -115,6 +161,10 @@ namespace Repositories.Migrations
 
                     b.Property<decimal>("Revenue")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Synopsis")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("MovieId");
 
@@ -280,6 +330,25 @@ namespace Repositories.Migrations
                     b.HasDiscriminator().HasValue("Director");
                 });
 
+            modelBuilder.Entity("Entities.Award", b =>
+                {
+                    b.HasOne("Entities.AwardType", "AwardType")
+                        .WithMany()
+                        .HasForeignKey("AwardTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Movie", "Movie")
+                        .WithMany("Awards")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AwardType");
+
+                    b.Navigation("Movie");
+                });
+
             modelBuilder.Entity("Entities.MovieDetail", b =>
                 {
                     b.HasOne("Entities.Movie", "Movie")
@@ -383,6 +452,8 @@ namespace Repositories.Migrations
 
             modelBuilder.Entity("Entities.Movie", b =>
                 {
+                    b.Navigation("Awards");
+
                     b.Navigation("MovieDetail")
                         .IsRequired();
                 });

@@ -129,8 +129,11 @@ namespace Repositories.Migrations
                     b.Property<bool>("IsInTheaters")
                         .HasColumnType("bit");
 
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("date");
+
                     b.Property<DateTime>("ReleaseDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("date");
 
                     b.Property<string>("Title")
                         .IsRequired()
