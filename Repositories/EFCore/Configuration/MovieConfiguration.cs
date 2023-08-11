@@ -13,6 +13,8 @@ namespace Repositories.EFCore.Configuration
 
             builder.Property(b => b.ReleaseDate).HasColumnType("date");
 
+            builder.ToTable(m => m.HasTrigger("trg_UpdateMovies"));
+
         }
     }
 }
