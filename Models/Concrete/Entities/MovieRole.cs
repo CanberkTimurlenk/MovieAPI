@@ -1,6 +1,8 @@
-﻿namespace Entities
+﻿using Models.Abstract.Entities;
+
+namespace Models.Concrete.Entities
 {
-    public class MovieRole
+    public class MovieRole : IEntity
     {
         public int Id { get; set; }
         public string Name { get; set; }
