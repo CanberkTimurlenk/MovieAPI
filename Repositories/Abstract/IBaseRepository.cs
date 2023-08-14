@@ -3,7 +3,7 @@ using Models.Abstract.RequestFeatures;
 using Models.Concrete.RequestFeatures;
 using System.Linq.Expressions;
 
-namespace Repositories.EFCore.Abstract
+namespace Repositories.Abstract
 {
     public interface IBaseRepository<T>
         where T : class, IEntity, new()

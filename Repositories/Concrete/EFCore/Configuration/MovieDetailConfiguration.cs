@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Models.Concrete.Entities;
 
-namespace Repositories.EFCore.Configuration
+namespace Repositories.Concrete.EFCore.Configuration
 {
     internal class MovieDetailConfiguration : IEntityTypeConfiguration<MovieDetail>
     {
@@ -13,7 +13,7 @@ namespace Repositories.EFCore.Configuration
             builder.HasOne(md => md.Movie)
                    .WithOne(m => m.MovieDetail)
                    .HasForeignKey<MovieDetail>(md => md.MovieId);
-                   
+
         }
     }
 }

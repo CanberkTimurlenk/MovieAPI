@@ -1,8 +1,8 @@
 ﻿using Models.Abstract.Entities;
 using Models.Abstract.RequestFeatures;
-using Repositories.EFCore.Abstract;
 
-namespace Repositories.EFCore.Extensions
+
+namespace Repositories.Concrete.EFCore.Extensions
 {
     public static class IQueryableExtensions
 

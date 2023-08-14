@@ -2,9 +2,9 @@
 using System.Reflection;
 using Models.Concrete.Entities;
 
-namespace Repositories.EFCore
+namespace Repositories.Concrete.EFCore.Contexts
 {
-    public class MovieContext : DbContext 
+    public class MovieContext : DbContext
     {
         public DbSet<AwardType> AwardTypes { get; set; }
         public DbSet<Award> Awards { get; set; }
@@ -16,7 +16,7 @@ namespace Repositories.EFCore
         public DbSet<MovieRole> MovieRoles { get; set; }
         public DbSet<Actor> Actors { get; set; }
         public DbSet<Director> Directors { get; set; }
-        
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
