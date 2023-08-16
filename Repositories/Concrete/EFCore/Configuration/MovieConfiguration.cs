@@ -11,7 +11,9 @@ namespace Repositories.Concrete.EFCore.Configuration
             //  Shadow Property
             builder.Property<DateTime?>("LastModified").HasColumnType("date");
 
-            builder.Property(b => b.ReleaseDate).HasColumnType("date");
+            builder.Property(m => m.ReleaseDate).HasColumnType("date");
+
+           
 
             builder.ToTable(m => m.HasTrigger("trg_UpdateMovies"));
 
