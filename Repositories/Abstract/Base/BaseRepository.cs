@@ -6,7 +6,7 @@ using Repositories.Concrete.EFCore.Contexts;
 using Repositories.Concrete.EFCore.Extensions;
 using System.Linq.Expressions;
 
-namespace Repositories.Abstract
+namespace Repositories.Abstract.Base
 {
     public abstract class BaseRepository<T> : IBaseRepository<T>
         where T : class, IEntity, new()
@@ -18,7 +18,7 @@ namespace Repositories.Abstract
             _context = context;
         }
 
-        public async Task<T?> FindAsync(int id)
+        public async Task<T> FindAsync(int id)
             => await _context.Set<T>().FindAsync(id);
 
         public async Task<PagedList<T>> GetAllByConditionAsync(Expression<Func<T, bool>> filter, RequestParameters requestParameters, bool trackChanges)
@@ -30,7 +30,7 @@ namespace Repositories.Abstract
             return PagedList<T>.ToPagedList(data, requestParameters);
         }
 
-        public async Task<T?> GetAsync(Expression<Func<T, bool>> filter, bool trackChanges)
+        public async Task<T> GetAsync(Expression<Func<T, bool>> filter, bool trackChanges)
             => await GetAllAsQueryable(trackChanges).Where(filter).SingleOrDefaultAsync();
 
         public async Task CreateAsync(T entity)
