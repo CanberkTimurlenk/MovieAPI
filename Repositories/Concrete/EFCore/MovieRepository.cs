@@ -11,12 +11,12 @@ namespace Repositories.Concrete.EFCore
 {
     public class MovieRepository : BaseRepository<Movie>, IMovieRepository
     {
-        private readonly MovieContext _context;
+        
 
 
         public MovieRepository(MovieContext context) : base(context)
         {
-            _context = context;
+            
         }
 
         public async Task<IEnumerable<Movie>> GetMoviesByLocation(Expression<Func<Location, bool>> filter, bool trackChanges)

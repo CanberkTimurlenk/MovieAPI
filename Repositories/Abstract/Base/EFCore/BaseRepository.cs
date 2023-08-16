@@ -6,12 +6,12 @@ using Repositories.Concrete.EFCore.Contexts;
 using Repositories.Concrete.EFCore.Extensions;
 using System.Linq.Expressions;
 
-namespace Repositories.Abstract.Base
+namespace Repositories.Abstract.Base.EFCore
 {
     public abstract class BaseRepository<T> : IBaseRepository<T>
         where T : class, IEntity, new()
     {
-        private readonly MovieContext _context;
+        protected readonly MovieContext _context;
 
         public BaseRepository(MovieContext context)
         {
