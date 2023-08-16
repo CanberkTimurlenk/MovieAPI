@@ -1,0 +1,9 @@
+﻿using Models.Concrete.Entities;
+using Repositories.Abstract.Base;
+
+namespace Repositories.Abstract
+{
+    public interface IMovieRepository: IBaseRepository<Movie>
+    {
+    }
+}
