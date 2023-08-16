@@ -11,7 +11,7 @@ namespace Models.Concrete.Entities
         public DateTime BirthDate { get; set; }
         public string? Description { get; set; }
 
-        public List<MovieRole>? MovieRoles { get; set; }
+        public ICollection<MovieRole>? MovieRoles { get; set; }
 
 
     }
