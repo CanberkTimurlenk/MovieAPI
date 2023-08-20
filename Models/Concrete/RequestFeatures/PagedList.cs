@@ -10,7 +10,7 @@ namespace Models.Concrete.RequestFeatures
         private readonly List<T> _list = new List<T>();
         public MetaData MetaData { get; set; }
 
-        public PagedList(List<T> items, int count, int pageNumber, int pageSize)
+        public PagedList(IEnumerable<T> items, int count, int pageNumber, int pageSize)
         {
             _list.AddRange(items);
 
@@ -24,13 +24,9 @@ namespace Models.Concrete.RequestFeatures
             };
         }
 
-        public static PagedList<T> ToPagedList(IEnumerable<T> source, RequestParameters requestParameters)
-        {
-            int count = source.Count();
-
-            return new PagedList<T>(source.ToList(), count, requestParameters.PageNumber, requestParameters.PageSize);
-
-        }
+        public async static Task<PagedList<T>> AsPaged(IEnumerable<T> source,int count, RequestParameters requestParameters)
+            
+            => new PagedList<T>(source, count, requestParameters.PageNumber, requestParameters.PageSize);
 
         public IEnumerator<T> GetEnumerator()
             => _list.GetEnumerator();
