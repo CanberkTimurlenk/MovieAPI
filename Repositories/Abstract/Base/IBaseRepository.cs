@@ -5,18 +5,17 @@ using System.Linq.Expressions;
 
 namespace Repositories.Abstract.Base
 {
-    public interface IBaseRepository<T>
-        where T : class, IEntity, new()
+    public interface IBaseRepository<TEntity>
+        where TEntity : class, IEntity, new()
     {
-        Task<T> GetAsync(Expression<Func<T, bool>> filter, bool trackChanges);
-        Task<T> FindAsync(int id);
-        Task<PagedList<T>> GetAllByConditionAsync(Expression<Func<T, bool>> filter, RequestParameters requestParameters, bool trackChanges);
+        Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> filter, bool trackChanges);
+        Task<TEntity> FindAsync(int id);
+        Task<PagedList<TEntity>> GetAllByConditionAsync(Expression<Func<TEntity, bool>> filter, RequestParameters requestParameters, bool trackChanges);       
 
-
-        Task CreateAsync(T entity);
-        void Update(T entity);
-        void Delete(T entity);
-        Task<int> DeleteByConditionAsync(Expression<Func<T, bool>> filter);
+        Task<bool> CreateAsync(TEntity entity);
+        bool Update(TEntity entity);
+        bool Delete(TEntity entity);
+        Task<int> DeleteByConditionAsync(Expression<Func<TEntity, bool>> filter);
 
     }
 }
