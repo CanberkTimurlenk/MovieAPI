@@ -1,9 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Models.Abstract.Entities;
 using Models.Abstract.RequestFeatures;
-using Models.Concrete.Entities;
 using Models.Concrete.RequestFeatures;
 using Repositories.Concrete.EFCore.Contexts;
 using Repositories.Concrete.EFCore.Extensions;

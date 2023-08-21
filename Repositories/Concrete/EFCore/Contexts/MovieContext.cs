@@ -6,6 +6,11 @@ namespace Repositories.Concrete.EFCore.Contexts
 {
     public class MovieContext : DbContext
     {
+        public MovieContext(DbContextOptions options) : base(options)
+        {
+
+        }
+
         public DbSet<AwardType> AwardTypes { get; set; }
         public DbSet<Award> Awards { get; set; }
         public DbSet<Genre> Genres { get; set; }
@@ -20,7 +25,7 @@ namespace Repositories.Concrete.EFCore.Contexts
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\MSSQLLocalDB;Database=MovieApp;Trusted_Connection=True;");
+            //optionsBuilder.UseSqlServer(@"");
         }
 
 
