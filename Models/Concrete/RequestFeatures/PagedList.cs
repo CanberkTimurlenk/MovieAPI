@@ -5,7 +5,7 @@ using System.Collections;
 namespace Models.Concrete.RequestFeatures
 {
     public class PagedList<T> : IEnumerable<T>
-        where T : class, IEntity, new()
+        where T : class, new()
     {
         private readonly List<T> _list = new List<T>();
         public MetaData MetaData { get; set; }
