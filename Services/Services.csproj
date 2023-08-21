@@ -15,4 +15,12 @@
     <ProjectReference Include="..\Repositories\Repositories.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Users\Canberk\source\repos\MovieApp\Services\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\Users\Canberk\source\repos\MovieApp\Services\.editorconfig" />
+  </ItemGroup>
+
 </Project>
