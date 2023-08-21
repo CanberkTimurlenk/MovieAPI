@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Repositories.Migrations
+namespace WebApi.Migrations
 {
     /// <inheritdoc />
     public partial class CreateTrigger_Movies_LastModified_After_Update_GetDate : Migration

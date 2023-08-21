@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace Repositories.Migrations
+namespace WebApi.Migrations
 {
     /// <inheritdoc />
     public partial class Add_Seed_Data : Migration

@@ -9,11 +9,11 @@ using Repositories.Concrete.EFCore.Contexts;
 
 #nullable disable
 
-namespace Repositories.Migrations
+namespace WebApi.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    [Migration("20230815213211_Modify_Prop_Type_Genre_Name")]
-    partial class Modify_Prop_Type_Genre_Name
+    [Migration("20230820101007_Add_Seed_Data")]
+    partial class Add_Seed_Data
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -143,6 +143,33 @@ namespace Repositories.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Genres");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Sci-Fi"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Horror"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Action"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Adventure"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Drama"
+                        });
                 });
 
             modelBuilder.Entity("Models.Concrete.Entities.Language", b =>
@@ -208,6 +235,48 @@ namespace Repositories.Migrations
                     b.ToTable("Movies", t =>
                         {
                             t.HasTrigger("trg_UpdateMovies");
+                        });
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DurationAsMinute = 119,
+                            IsReleased = true,
+                            ReleaseDate = new DateTime(1982, 6, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "The Thing"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DurationAsMinute = 120,
+                            IsReleased = true,
+                            ReleaseDate = new DateTime(1941, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "Citizen Kane"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            DurationAsMinute = 99,
+                            IsReleased = true,
+                            ReleaseDate = new DateTime(1981, 7, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "Escape From New York"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            DurationAsMinute = 207,
+                            IsReleased = true,
+                            ReleaseDate = new DateTime(1954, 4, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "Seven Samurai"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            DurationAsMinute = 100,
+                            IsReleased = true,
+                            ReleaseDate = new DateTime(1998, 10, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "Dark City"
                         });
                 });
 

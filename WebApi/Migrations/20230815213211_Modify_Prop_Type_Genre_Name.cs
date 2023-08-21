@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Repositories.Migrations
+namespace WebApi.Migrations
 {
     /// <inheritdoc />
     public partial class Modify_Prop_Type_Genre_Name : Migration

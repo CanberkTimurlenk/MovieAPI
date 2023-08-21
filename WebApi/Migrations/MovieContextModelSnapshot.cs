@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repositories.Concrete.EFCore.Contexts;
 
 #nullable disable
 
-namespace Repositories.Migrations
+namespace WebApi.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    [Migration("20230820101007_Add_Seed_Data")]
-    partial class Add_Seed_Data
+    partial class MovieContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,7 +34,7 @@ namespace Repositories.Migrations
 
                     b.HasIndex("MoviesId");
 
-                    b.ToTable("GenreMovie");
+                    b.ToTable("GenreMovie", (string)null);
                 });
 
             modelBuilder.Entity("GenreMovieRole", b =>
@@ -52,7 +49,7 @@ namespace Repositories.Migrations
 
                     b.HasIndex("MovieRolesId");
 
-                    b.ToTable("GenreMovieRole");
+                    b.ToTable("GenreMovieRole", (string)null);
                 });
 
             modelBuilder.Entity("LanguageMovie", b =>
@@ -67,7 +64,7 @@ namespace Repositories.Migrations
 
                     b.HasIndex("MoviesId");
 
-                    b.ToTable("LanguageMovie");
+                    b.ToTable("LanguageMovie", (string)null);
                 });
 
             modelBuilder.Entity("LocationMovie", b =>
@@ -82,7 +79,7 @@ namespace Repositories.Migrations
 
                     b.HasIndex("MoviesId");
 
-                    b.ToTable("LocationMovie");
+                    b.ToTable("LocationMovie", (string)null);
                 });
 
             modelBuilder.Entity("Models.Concrete.Entities.Award", b =>
@@ -105,7 +102,7 @@ namespace Repositories.Migrations
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("Awards");
+                    b.ToTable("Awards", (string)null);
                 });
 
             modelBuilder.Entity("Models.Concrete.Entities.AwardType", b =>
@@ -125,7 +122,7 @@ namespace Repositories.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("AwardTypes");
+                    b.ToTable("AwardTypes", (string)null);
                 });
 
             modelBuilder.Entity("Models.Concrete.Entities.Genre", b =>
@@ -142,7 +139,7 @@ namespace Repositories.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genres");
+                    b.ToTable("Genres", (string)null);
 
                     b.HasData(
                         new
@@ -186,7 +183,7 @@ namespace Repositories.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Languages");
+                    b.ToTable("Languages", (string)null);
                 });
 
             modelBuilder.Entity("Models.Concrete.Entities.Location", b =>
@@ -203,7 +200,7 @@ namespace Repositories.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Locations");
+                    b.ToTable("Locations", (string)null);
                 });
 
             modelBuilder.Entity("Models.Concrete.Entities.Movie", b =>
@@ -232,7 +229,7 @@ namespace Repositories.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Movies", t =>
+                    b.ToTable("Movies", null, t =>
                         {
                             t.HasTrigger("trg_UpdateMovies");
                         });
@@ -301,7 +298,7 @@ namespace Repositories.Migrations
 
                     b.HasKey("MovieId");
 
-                    b.ToTable("MovieDetails");
+                    b.ToTable("MovieDetails", (string)null);
                 });
 
             modelBuilder.Entity("Models.Concrete.Entities.MovieRole", b =>
@@ -322,7 +319,7 @@ namespace Repositories.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MovieRoles");
+                    b.ToTable("MovieRoles", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("MovieRole");
 
@@ -353,7 +350,7 @@ namespace Repositories.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Person");
+                    b.ToTable("Person", (string)null);
                 });
 
             modelBuilder.Entity("MovieMovieRole", b =>
@@ -368,7 +365,7 @@ namespace Repositories.Migrations
 
                     b.HasIndex("MoviesId");
 
-                    b.ToTable("MovieMovieRole");
+                    b.ToTable("MovieMovieRole", (string)null);
                 });
 
             modelBuilder.Entity("MovieRolePerson", b =>
@@ -383,7 +380,7 @@ namespace Repositories.Migrations
 
                     b.HasIndex("PersonsId");
 
-                    b.ToTable("MovieRolePerson");
+                    b.ToTable("MovieRolePerson", (string)null);
                 });
 
             modelBuilder.Entity("Models.Concrete.Entities.Actor", b =>

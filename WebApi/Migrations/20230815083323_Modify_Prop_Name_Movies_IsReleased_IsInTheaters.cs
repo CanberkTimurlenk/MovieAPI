@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Repositories.Migrations
+namespace WebApi.Migrations
 {
     /// <inheritdoc />
     public partial class Modify_Prop_Name_Movies_IsReleased_IsInTheaters : Migration
