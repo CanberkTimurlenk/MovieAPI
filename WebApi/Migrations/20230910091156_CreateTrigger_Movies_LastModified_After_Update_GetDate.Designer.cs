@@ -12,8 +12,8 @@ using Repositories.Concrete.EFCore.Contexts;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    [Migration("20230815213211_Modify_Prop_Type_Genre_Name")]
-    partial class Modify_Prop_Type_Genre_Name
+    [Migration("20230910091156_CreateTrigger_Movies_LastModified_After_Update_GetDate")]
+    partial class CreateTrigger_Movies_LastModified_After_Update_GetDate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,70 +25,25 @@ namespace WebApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("GenreMovie", b =>
+            modelBuilder.Entity("GenrePerson", b =>
                 {
                     b.Property<int>("GenresId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MoviesId")
+                    b.Property<int>("PersonsId")
                         .HasColumnType("int");
 
-                    b.HasKey("GenresId", "MoviesId");
+                    b.HasKey("GenresId", "PersonsId");
 
-                    b.HasIndex("MoviesId");
+                    b.HasIndex("PersonsId");
 
-                    b.ToTable("GenreMovie");
-                });
-
-            modelBuilder.Entity("GenreMovieRole", b =>
-                {
-                    b.Property<int>("GenresId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MovieRolesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("GenresId", "MovieRolesId");
-
-                    b.HasIndex("MovieRolesId");
-
-                    b.ToTable("GenreMovieRole");
-                });
-
-            modelBuilder.Entity("LanguageMovie", b =>
-                {
-                    b.Property<int>("LanguagesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MoviesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("LanguagesId", "MoviesId");
-
-                    b.HasIndex("MoviesId");
-
-                    b.ToTable("LanguageMovie");
-                });
-
-            modelBuilder.Entity("LocationMovie", b =>
-                {
-                    b.Property<int>("LocationsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MoviesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("LocationsId", "MoviesId");
-
-                    b.HasIndex("MoviesId");
-
-                    b.ToTable("LocationMovie");
+                    b.ToTable("GenrePerson");
                 });
 
             modelBuilder.Entity("Models.Concrete.Entities.Award", b =>
                 {
-                    b.Property<int>("Year")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("AwardTypeId")
                         .HasColumnType("int");
@@ -99,7 +54,7 @@ namespace WebApi.Migrations
                     b.Property<int>("MovieId")
                         .HasColumnType("int");
 
-                    b.HasKey("Year", "AwardTypeId");
+                    b.HasKey("Date", "AwardTypeId");
 
                     b.HasIndex("AwardTypeId");
 
@@ -120,8 +75,9 @@ namespace WebApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Name")
-                        .HasColumnType("int");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -143,6 +99,93 @@ namespace WebApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Genres");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Sci-Fi"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Horror"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Action"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "Adventure"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "Drama"
+                        });
+                });
+
+            modelBuilder.Entity("Models.Concrete.Entities.Junctions.MovieGenre", b =>
+                {
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GenreId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MovieId", "GenreId");
+
+                    b.HasIndex("GenreId");
+
+                    b.ToTable("MovieGenres");
+                });
+
+            modelBuilder.Entity("Models.Concrete.Entities.Junctions.MovieLanguage", b =>
+                {
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LanguageId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MovieId", "LanguageId");
+
+                    b.HasIndex("LanguageId");
+
+                    b.ToTable("MovieLanguages");
+                });
+
+            modelBuilder.Entity("Models.Concrete.Entities.Junctions.MovieLocation", b =>
+                {
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LocationId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MovieId", "LocationId");
+
+                    b.HasIndex("LocationId");
+
+                    b.ToTable("MovieLocations");
+                });
+
+            modelBuilder.Entity("Models.Concrete.Entities.Junctions.MoviePerson", b =>
+                {
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PersonId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MovieId", "PersonId");
+
+                    b.HasIndex("PersonId");
+
+                    b.ToTable("MoviePerson");
                 });
 
             modelBuilder.Entity("Models.Concrete.Entities.Language", b =>
@@ -209,6 +252,48 @@ namespace WebApi.Migrations
                         {
                             t.HasTrigger("trg_UpdateMovies");
                         });
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            DurationAsMinute = 119,
+                            IsReleased = true,
+                            ReleaseDate = new DateTime(1982, 6, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "The Thing"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            DurationAsMinute = 120,
+                            IsReleased = true,
+                            ReleaseDate = new DateTime(1941, 9, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "Citizen Kane"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            DurationAsMinute = 99,
+                            IsReleased = true,
+                            ReleaseDate = new DateTime(1981, 7, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "Escape From New York"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            DurationAsMinute = 207,
+                            IsReleased = true,
+                            ReleaseDate = new DateTime(1954, 4, 26, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "Seven Samurai"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            DurationAsMinute = 100,
+                            IsReleased = true,
+                            ReleaseDate = new DateTime(1998, 10, 16, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Title = "Dark City"
+                        });
                 });
 
             modelBuilder.Entity("Models.Concrete.Entities.MovieDetail", b =>
@@ -247,10 +332,6 @@ namespace WebApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("MovieRoles");
@@ -284,22 +365,7 @@ namespace WebApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Person");
-                });
-
-            modelBuilder.Entity("MovieMovieRole", b =>
-                {
-                    b.Property<int>("MovieRolesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MoviesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("MovieRolesId", "MoviesId");
-
-                    b.HasIndex("MoviesId");
-
-                    b.ToTable("MovieMovieRole");
+                    b.ToTable("Persons");
                 });
 
             modelBuilder.Entity("MovieRolePerson", b =>
@@ -328,13 +394,10 @@ namespace WebApi.Migrations
                 {
                     b.HasBaseType("Models.Concrete.Entities.MovieRole");
 
-                    b.Property<string>("AlternativeName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasDiscriminator().HasValue("Director");
                 });
 
-            modelBuilder.Entity("GenreMovie", b =>
+            modelBuilder.Entity("GenrePerson", b =>
                 {
                     b.HasOne("Models.Concrete.Entities.Genre", null)
                         .WithMany()
@@ -342,54 +405,9 @@ namespace WebApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Models.Concrete.Entities.Movie", null)
+                    b.HasOne("Models.Concrete.Entities.Person", null)
                         .WithMany()
-                        .HasForeignKey("MoviesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("GenreMovieRole", b =>
-                {
-                    b.HasOne("Models.Concrete.Entities.Genre", null)
-                        .WithMany()
-                        .HasForeignKey("GenresId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.Concrete.Entities.MovieRole", null)
-                        .WithMany()
-                        .HasForeignKey("MovieRolesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("LanguageMovie", b =>
-                {
-                    b.HasOne("Models.Concrete.Entities.Language", null)
-                        .WithMany()
-                        .HasForeignKey("LanguagesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.Concrete.Entities.Movie", null)
-                        .WithMany()
-                        .HasForeignKey("MoviesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("LocationMovie", b =>
-                {
-                    b.HasOne("Models.Concrete.Entities.Location", null)
-                        .WithMany()
-                        .HasForeignKey("LocationsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.Concrete.Entities.Movie", null)
-                        .WithMany()
-                        .HasForeignKey("MoviesId")
+                        .HasForeignKey("PersonsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -397,7 +415,7 @@ namespace WebApi.Migrations
             modelBuilder.Entity("Models.Concrete.Entities.Award", b =>
                 {
                     b.HasOne("Models.Concrete.Entities.AwardType", "AwardType")
-                        .WithMany()
+                        .WithMany("Awards")
                         .HasForeignKey("AwardTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -413,6 +431,82 @@ namespace WebApi.Migrations
                     b.Navigation("Movie");
                 });
 
+            modelBuilder.Entity("Models.Concrete.Entities.Junctions.MovieGenre", b =>
+                {
+                    b.HasOne("Models.Concrete.Entities.Genre", "Genre")
+                        .WithMany("Movies")
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Concrete.Entities.Movie", "Movie")
+                        .WithMany("Genres")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Genre");
+
+                    b.Navigation("Movie");
+                });
+
+            modelBuilder.Entity("Models.Concrete.Entities.Junctions.MovieLanguage", b =>
+                {
+                    b.HasOne("Models.Concrete.Entities.Language", "Language")
+                        .WithMany("Movies")
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Concrete.Entities.Movie", "Movie")
+                        .WithMany("Languages")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Language");
+
+                    b.Navigation("Movie");
+                });
+
+            modelBuilder.Entity("Models.Concrete.Entities.Junctions.MovieLocation", b =>
+                {
+                    b.HasOne("Models.Concrete.Entities.Location", "Location")
+                        .WithMany("Movies")
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Concrete.Entities.Movie", "Movie")
+                        .WithMany("Locations")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Location");
+
+                    b.Navigation("Movie");
+                });
+
+            modelBuilder.Entity("Models.Concrete.Entities.Junctions.MoviePerson", b =>
+                {
+                    b.HasOne("Models.Concrete.Entities.Movie", "Movie")
+                        .WithMany("Crew")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Concrete.Entities.Person", "Person")
+                        .WithMany("Movies")
+                        .HasForeignKey("PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Movie");
+
+                    b.Navigation("Person");
+                });
+
             modelBuilder.Entity("Models.Concrete.Entities.MovieDetail", b =>
                 {
                     b.HasOne("Models.Concrete.Entities.Movie", "Movie")
@@ -422,21 +516,6 @@ namespace WebApi.Migrations
                         .IsRequired();
 
                     b.Navigation("Movie");
-                });
-
-            modelBuilder.Entity("MovieMovieRole", b =>
-                {
-                    b.HasOne("Models.Concrete.Entities.MovieRole", null)
-                        .WithMany()
-                        .HasForeignKey("MovieRolesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.Concrete.Entities.Movie", null)
-                        .WithMany()
-                        .HasForeignKey("MoviesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("MovieRolePerson", b =>
@@ -454,12 +533,45 @@ namespace WebApi.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Models.Concrete.Entities.AwardType", b =>
+                {
+                    b.Navigation("Awards");
+                });
+
+            modelBuilder.Entity("Models.Concrete.Entities.Genre", b =>
+                {
+                    b.Navigation("Movies");
+                });
+
+            modelBuilder.Entity("Models.Concrete.Entities.Language", b =>
+                {
+                    b.Navigation("Movies");
+                });
+
+            modelBuilder.Entity("Models.Concrete.Entities.Location", b =>
+                {
+                    b.Navigation("Movies");
+                });
+
             modelBuilder.Entity("Models.Concrete.Entities.Movie", b =>
                 {
                     b.Navigation("Awards");
 
+                    b.Navigation("Crew");
+
+                    b.Navigation("Genres");
+
+                    b.Navigation("Languages");
+
+                    b.Navigation("Locations");
+
                     b.Navigation("MovieDetail")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Models.Concrete.Entities.Person", b =>
+                {
+                    b.Navigation("Movies");
                 });
 #pragma warning restore 612, 618
         }
