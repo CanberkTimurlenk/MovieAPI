@@ -1,4 +1,5 @@
 ﻿using Models.Abstract.Entities;
+using Models.Concrete.Entities.Junctions;
 
 namespace Models.Concrete.Entities
 {
@@ -11,11 +12,12 @@ namespace Models.Concrete.Entities
         public bool IsReleased { get; set; }
 
 
-        public ICollection<MovieRole>? MovieRoles { get; set; }
-        public ICollection<Genre> Genres { get; set; }
         public MovieDetail MovieDetail { get; set; }
-        public ICollection<Language> Languages { get; set; }
-        public ICollection<Location> Locations { get; set; }
+        public ICollection<MoviePerson>? Crew { get; set; }
+        public ICollection<MovieGenre> Genres { get; set; }
+        public ICollection<MovieLanguage> Languages { get; set; }
+        public ICollection<MovieLocation> Locations { get; set; }
         public ICollection<Award> Awards { get; set; }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Models.Abstract.Entities;
+using Models.Concrete.Entities.Junctions;
 
 namespace Models.Concrete.Entities
 {
@@ -7,10 +8,7 @@ namespace Models.Concrete.Entities
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public ICollection<Movie> Movies { get; set; }
-
-        public ICollection<MovieRole>? MovieRoles { get; set; }
-
-
+        public ICollection<MovieGenre> Movies { get; set; }
+        public ICollection<Person>? Persons { get; set; }
     }
 }
