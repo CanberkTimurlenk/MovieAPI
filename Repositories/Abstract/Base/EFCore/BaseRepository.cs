@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Models.Abstract.Domains;
 using Models.Abstract.Entities;
 using Models.Abstract.RequestFeatures;
 using Models.Concrete.RequestFeatures;
@@ -24,9 +25,9 @@ namespace Repositories.Abstract.Base.EFCore
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<TEntity> FindAsync(int id)
+        public async Task<TEntity> FindAsync(params int[] keys)
 
-            => await _context.Set<TEntity>().FindAsync(id);
+            => await _context.Set<TEntity>().FindAsync(keys);
 
         public async Task<PagedList<TEntity>> GetAllByConditionAsync(Expression<Func<TEntity, bool>> filter, RequestParameters requestParameters, bool trackChanges)
 
@@ -34,7 +35,7 @@ namespace Repositories.Abstract.Base.EFCore
                                     .ToPagedList(requestParameters);
 
         public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> filter, bool trackChanges)
-            
+
             => await GetAllAsQueryable(trackChanges).Where(filter).SingleOrDefaultAsync();
 
 
@@ -44,11 +45,27 @@ namespace Repositories.Abstract.Base.EFCore
             return entityEntry.State == EntityState.Added;
         }
 
-        public bool Delete(TEntity entity)
+        public bool Remove(TEntity entity)
         {
             EntityEntry entityEntry = _context.Set<TEntity>().Remove(entity);
             return entityEntry.State == EntityState.Deleted;
         }
+
+        public void RemoveRange(IEnumerable<TEntity> entity)
+        {
+
+            _context.Set<TEntity>().RemoveRange(entity);
+
+        }
+
+        /// <summary>
+        /// Check if any entity exists with given primary key
+        /// </summary>
+        /// <param name="pK"></param>
+        /// <returns></returns>
+        public async Task<bool> Any<TEntityWithHasOwnPk>(int pK)
+            where TEntityWithHasOwnPk : class, IEntityWithHasOwnPk, new()
+            => await _context.Set<TEntityWithHasOwnPk>().AnyAsync(e => e.Id.Equals(pK));
 
         public bool Update(TEntity entity)
         {
@@ -57,18 +74,18 @@ namespace Repositories.Abstract.Base.EFCore
         }
 
         public async Task<int> DeleteByConditionAsync(Expression<Func<TEntity, bool>> filter)
-            
+
             => await GetAllByConditionAsQueryable(filter, true).ExecuteDeleteAsync();  //  EF CORE 7 
 
 
         protected IQueryable<TEntity> GetAllAsQueryable(bool trackChanges)
-            
+
             => trackChanges
                 ? _context.Set<TEntity>()
                 : _context.Set<TEntity>().AsNoTracking();
 
         protected IQueryable<TEntity> GetAllByConditionAsQueryable(Expression<Func<TEntity, bool>> filter, bool trackChanges)
-            
+
             => GetAllAsQueryable(trackChanges).Where(filter);
 
 
