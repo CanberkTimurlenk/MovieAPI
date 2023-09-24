@@ -17,7 +17,7 @@ namespace Repositories.Concrete.EFCore.Extensions
                                      .Take(requestParameters.PageSize)
                                      .ToListAsync();
 
-            return await PagedList<T>.AsPaged(result, count, requestParameters);
+            return PagedList<T>.AsPaged(result, count, requestParameters);
         }
     }
 }
