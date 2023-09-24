@@ -4,12 +4,11 @@ using Models.Concrete.Entities.Junctions;
 
 namespace Repositories.Concrete.EFCore.Configurations.Junctions
 {
-    public class MovieLanguagesConfiguration : IEntityTypeConfiguration<MovieLanguage>
+    public class MovieLanguageConfiguration : IEntityTypeConfiguration<MovieLanguage>
     {
         public void Configure(EntityTypeBuilder<MovieLanguage> builder)
-        {
-            builder.HasKey(ml => new { ml.MovieId, ml.LanguageId });
-
+        {            
+            builder.HasKey(ml => new { ml.MovieId, ml.LanguageId });            
 
             builder.HasOne(ml => ml.Movie)
             .WithMany(m => m.Languages)
@@ -17,7 +16,7 @@ namespace Repositories.Concrete.EFCore.Configurations.Junctions
 
             builder.HasOne(ml => ml.Language)
                    .WithMany(l => l.Movies)
-                   .HasForeignKey(ml => ml.LanguageId);
+                   .HasForeignKey(ml => ml.LanguageId);           
         }
     }
 }

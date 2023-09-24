@@ -13,7 +13,7 @@ namespace Repositories.Concrete.EFCore.Configuration
 
             builder.Property(m => m.ReleaseDate).HasColumnType("date");
 
-            builder.ToTable(m => m.HasTrigger("trg_UpdateMovies"));
+            builder.ToTable(m => m.HasTrigger("TRG_Movies_LastModified_After_Update_GetDate"));
 
 
             builder.HasData(new Movie

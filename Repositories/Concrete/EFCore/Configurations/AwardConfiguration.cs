@@ -8,7 +8,9 @@ namespace Repositories.Concrete.EFCore.Configuration
     {
         public void Configure(EntityTypeBuilder<Award> builder)
         {
-            builder.HasKey(a => new { a.Date, a.AwardTypeId });
+            builder.ToTable(m => m.HasTrigger("TRG_PreventDuplicateAwards"));
+
+            builder.HasKey(a => new { a.AwardTypeId, a.MovieId });
 
             builder.HasOne(a => a.Movie)
                    .WithMany(m => m.Awards)

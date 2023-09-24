@@ -4,7 +4,7 @@ using Models.Concrete.Entities.Junctions;
 
 namespace Repositories.Concrete.EFCore.Configurations.Junctions
 {
-    public class MovieGenresConfiguration : IEntityTypeConfiguration<MovieGenre>
+    public class MovieGenreConfiguration : IEntityTypeConfiguration<MovieGenre>
     {
         public void Configure(EntityTypeBuilder<MovieGenre> builder)
         {

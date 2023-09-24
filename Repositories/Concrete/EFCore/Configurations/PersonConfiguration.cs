@@ -8,7 +8,15 @@ namespace Repositories.Concrete.EFCore.Configuration
     {
         public void Configure(EntityTypeBuilder<Person> builder)
         {
-            
+            builder.HasOne(p => p.Actor)
+                   .WithOne(a => a.Person)
+                   .HasForeignKey<Actor>(a => a.PersonId);
+
+            builder.HasOne(p => p.Director)
+                   .WithOne(d => d.Person)
+                   .HasForeignKey<Director>(d => d.PersonId);
+
+
         }
     }
 }

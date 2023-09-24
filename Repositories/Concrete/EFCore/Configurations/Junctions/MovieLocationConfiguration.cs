@@ -4,7 +4,7 @@ using Models.Concrete.Entities.Junctions;
 
 namespace Repositories.Concrete.EFCore.Configurations.Junctions
 {
-    public class MovieLocationsConfiguration : IEntityTypeConfiguration<MovieLocation>
+    public class MovieLocationConfiguration : IEntityTypeConfiguration<MovieLocation>
     {
         public void Configure(EntityTypeBuilder<MovieLocation> builder)
         {
@@ -17,6 +17,6 @@ namespace Repositories.Concrete.EFCore.Configurations.Junctions
             builder.HasOne(ml => ml.Location)
                    .WithMany(l => l.Movies)
                    .HasForeignKey(ml => ml.LocationId);
-        }
+            }
     }
 }

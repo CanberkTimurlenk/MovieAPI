@@ -4,10 +4,12 @@ using Models.Concrete.Entities.Junctions;
 
 namespace Repositories.Concrete.EFCore.Configurations.Junctions
 {
-    public class MoviePersonsConfiguration : IEntityTypeConfiguration<MoviePerson>
+    public class MoviePersonConfiguration : IEntityTypeConfiguration<MoviePerson>
     {
         public void Configure(EntityTypeBuilder<MoviePerson> builder)
         {
+            builder.ToTable("MoviePersons");
+
             builder.HasKey(mp => new { mp.MovieId, mp.PersonId });
 
             builder.HasOne(mp => mp.Movie)
