@@ -1,16 +1,18 @@
-using Microsoft.Extensions.DependencyInjection;
+
 using Presentation.AssemblyReference;
-using System.Reflection;
+
 using WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers().AddApplicationPart(typeof(AssemblyReference).Assembly);
+builder.Services.AddControllers()
+                .AddNewtonsoftJson()
+                .AddApplicationPart(typeof(AssemblyReference).Assembly);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddEndpointsApiExplorer(); 
 builder.Services.AddSwaggerGen();
 
 builder.Services.ConfigureSqlContext(builder.Configuration);
