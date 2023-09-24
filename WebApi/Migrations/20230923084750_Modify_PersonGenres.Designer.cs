@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repositories.Concrete.EFCore.Contexts;
 
@@ -11,9 +12,11 @@ using Repositories.Concrete.EFCore.Contexts;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    partial class MovieContextModelSnapshot : ModelSnapshot
+    [Migration("20230923084750_Modify_PersonGenres")]
+    partial class Modify_PersonGenres
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace WebApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Models.Concrete.Domains.Junctions.PersonGenre", b =>
+            modelBuilder.Entity("Models.Concrete.Domains.Junctions.PersonGenres", b =>
                 {
                     b.Property<int>("PersonId")
                         .HasColumnType("int");
@@ -53,19 +56,21 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("Models.Concrete.Entities.Award", b =>
                 {
-                    b.Property<int>("AwardTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MovieId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("AwardTypeId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("AwardTypeId", "MovieId");
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Date", "AwardTypeId");
+
+                    b.HasIndex("AwardTypeId");
 
                     b.HasIndex("MovieId");
 
@@ -154,7 +159,7 @@ namespace WebApi.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Models.Concrete.Entities.Junctions.MovieGenre", b =>
+            modelBuilder.Entity("Models.Concrete.Entities.Junctions.MovieGenres", b =>
                 {
                     b.Property<int>("MovieId")
                         .HasColumnType("int");
@@ -169,7 +174,7 @@ namespace WebApi.Migrations
                     b.ToTable("MovieGenres");
                 });
 
-            modelBuilder.Entity("Models.Concrete.Entities.Junctions.MovieLanguage", b =>
+            modelBuilder.Entity("Models.Concrete.Entities.Junctions.MovieLanguages", b =>
                 {
                     b.Property<int>("MovieId")
                         .HasColumnType("int");
@@ -184,7 +189,7 @@ namespace WebApi.Migrations
                     b.ToTable("MovieLanguages");
                 });
 
-            modelBuilder.Entity("Models.Concrete.Entities.Junctions.MovieLocation", b =>
+            modelBuilder.Entity("Models.Concrete.Entities.Junctions.MovieLocations", b =>
                 {
                     b.Property<int>("MovieId")
                         .HasColumnType("int");
@@ -199,7 +204,7 @@ namespace WebApi.Migrations
                     b.ToTable("MovieLocations");
                 });
 
-            modelBuilder.Entity("Models.Concrete.Entities.Junctions.MoviePerson", b =>
+            modelBuilder.Entity("Models.Concrete.Entities.Junctions.MoviePersons", b =>
                 {
                     b.Property<int>("MovieId")
                         .HasColumnType("int");
@@ -211,7 +216,7 @@ namespace WebApi.Migrations
 
                     b.HasIndex("PersonId");
 
-                    b.ToTable("MoviePersons", (string)null);
+                    b.ToTable("MoviePersons");
                 });
 
             modelBuilder.Entity("Models.Concrete.Entities.Language", b =>
@@ -373,7 +378,7 @@ namespace WebApi.Migrations
                     b.ToTable("Persons");
                 });
 
-            modelBuilder.Entity("Models.Concrete.Domains.Junctions.PersonGenre", b =>
+            modelBuilder.Entity("Models.Concrete.Domains.Junctions.PersonGenres", b =>
                 {
                     b.HasOne("Models.Concrete.Entities.Genre", "Genre")
                         .WithMany("Persons")
@@ -433,7 +438,7 @@ namespace WebApi.Migrations
                     b.Navigation("Person");
                 });
 
-            modelBuilder.Entity("Models.Concrete.Entities.Junctions.MovieGenre", b =>
+            modelBuilder.Entity("Models.Concrete.Entities.Junctions.MovieGenres", b =>
                 {
                     b.HasOne("Models.Concrete.Entities.Genre", "Genre")
                         .WithMany("Movies")
@@ -452,7 +457,7 @@ namespace WebApi.Migrations
                     b.Navigation("Movie");
                 });
 
-            modelBuilder.Entity("Models.Concrete.Entities.Junctions.MovieLanguage", b =>
+            modelBuilder.Entity("Models.Concrete.Entities.Junctions.MovieLanguages", b =>
                 {
                     b.HasOne("Models.Concrete.Entities.Language", "Language")
                         .WithMany("Movies")
@@ -471,7 +476,7 @@ namespace WebApi.Migrations
                     b.Navigation("Movie");
                 });
 
-            modelBuilder.Entity("Models.Concrete.Entities.Junctions.MovieLocation", b =>
+            modelBuilder.Entity("Models.Concrete.Entities.Junctions.MovieLocations", b =>
                 {
                     b.HasOne("Models.Concrete.Entities.Location", "Location")
                         .WithMany("Movies")
@@ -490,7 +495,7 @@ namespace WebApi.Migrations
                     b.Navigation("Movie");
                 });
 
-            modelBuilder.Entity("Models.Concrete.Entities.Junctions.MoviePerson", b =>
+            modelBuilder.Entity("Models.Concrete.Entities.Junctions.MoviePersons", b =>
                 {
                     b.HasOne("Models.Concrete.Entities.Movie", "Movie")
                         .WithMany("Crew")

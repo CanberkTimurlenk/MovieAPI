@@ -10,7 +10,7 @@ namespace WebApi.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql($@"CREATE TRIGGER trg_UpdateMovies
+            migrationBuilder.Sql($@"CREATE TRIGGER TRG_Movies_LastModified_After_Update_GetDate
                                     ON dbo.Movies
                                     AFTER UPDATE
                                     AS
@@ -23,7 +23,7 @@ namespace WebApi.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql("DROP TRIGGER trg_UpdateMovies");
+            migrationBuilder.Sql("DROP TRIGGER TRG_Movies_LastModified_After_Update_GetDate");
         }
     }
 }

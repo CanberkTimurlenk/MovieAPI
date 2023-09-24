@@ -12,15 +12,15 @@ using Repositories.Concrete.EFCore.Contexts;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    [Migration("20230910091122_init")]
-    partial class init
+    [Migration("20230920234149_CreateTrigger_Movies_LastModified_After_Update_GetDate")]
+    partial class CreateTrigger_Movies_LastModified_After_Update_GetDate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("ProductVersion", "7.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -38,6 +38,20 @@ namespace WebApi.Migrations
                     b.HasIndex("PersonsId");
 
                     b.ToTable("GenrePerson");
+                });
+
+            modelBuilder.Entity("Models.Concrete.Entities.Actor", b =>
+                {
+                    b.Property<int>("PersonId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AlternativeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PersonId");
+
+                    b.ToTable("Actors");
                 });
 
             modelBuilder.Entity("Models.Concrete.Entities.Award", b =>
@@ -60,7 +74,10 @@ namespace WebApi.Migrations
 
                     b.HasIndex("MovieId");
 
-                    b.ToTable("Awards");
+                    b.ToTable("Awards", t =>
+                        {
+                            t.HasTrigger("TRG_PreventDuplicateAwards");
+                        });
                 });
 
             modelBuilder.Entity("Models.Concrete.Entities.AwardType", b =>
@@ -82,6 +99,20 @@ namespace WebApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AwardTypes");
+                });
+
+            modelBuilder.Entity("Models.Concrete.Entities.Director", b =>
+                {
+                    b.Property<int>("PersonId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AlternativeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PersonId");
+
+                    b.ToTable("Directors");
                 });
 
             modelBuilder.Entity("Models.Concrete.Entities.Genre", b =>
@@ -250,7 +281,7 @@ namespace WebApi.Migrations
 
                     b.ToTable("Movies", t =>
                         {
-                            t.HasTrigger("trg_UpdateMovies");
+                            t.HasTrigger("TRG_Movies_LastModified_After_Update_GetDate");
                         });
 
                     b.HasData(
@@ -320,27 +351,6 @@ namespace WebApi.Migrations
                     b.ToTable("MovieDetails");
                 });
 
-            modelBuilder.Entity("Models.Concrete.Entities.MovieRole", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("MovieRoles");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("MovieRole");
-
-                    b.UseTphMappingStrategy();
-                });
-
             modelBuilder.Entity("Models.Concrete.Entities.Person", b =>
                 {
                     b.Property<int>("Id")
@@ -368,35 +378,6 @@ namespace WebApi.Migrations
                     b.ToTable("Persons");
                 });
 
-            modelBuilder.Entity("MovieRolePerson", b =>
-                {
-                    b.Property<int>("MovieRolesId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PersonsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("MovieRolesId", "PersonsId");
-
-                    b.HasIndex("PersonsId");
-
-                    b.ToTable("MovieRolePerson");
-                });
-
-            modelBuilder.Entity("Models.Concrete.Entities.Actor", b =>
-                {
-                    b.HasBaseType("Models.Concrete.Entities.MovieRole");
-
-                    b.HasDiscriminator().HasValue("Actor");
-                });
-
-            modelBuilder.Entity("Models.Concrete.Entities.Director", b =>
-                {
-                    b.HasBaseType("Models.Concrete.Entities.MovieRole");
-
-                    b.HasDiscriminator().HasValue("Director");
-                });
-
             modelBuilder.Entity("GenrePerson", b =>
                 {
                     b.HasOne("Models.Concrete.Entities.Genre", null)
@@ -410,6 +391,17 @@ namespace WebApi.Migrations
                         .HasForeignKey("PersonsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Models.Concrete.Entities.Actor", b =>
+                {
+                    b.HasOne("Models.Concrete.Entities.Person", "Person")
+                        .WithOne("Actor")
+                        .HasForeignKey("Models.Concrete.Entities.Actor", "PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Person");
                 });
 
             modelBuilder.Entity("Models.Concrete.Entities.Award", b =>
@@ -429,6 +421,17 @@ namespace WebApi.Migrations
                     b.Navigation("AwardType");
 
                     b.Navigation("Movie");
+                });
+
+            modelBuilder.Entity("Models.Concrete.Entities.Director", b =>
+                {
+                    b.HasOne("Models.Concrete.Entities.Person", "Person")
+                        .WithOne("Director")
+                        .HasForeignKey("Models.Concrete.Entities.Director", "PersonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Person");
                 });
 
             modelBuilder.Entity("Models.Concrete.Entities.Junctions.MovieGenre", b =>
@@ -518,21 +521,6 @@ namespace WebApi.Migrations
                     b.Navigation("Movie");
                 });
 
-            modelBuilder.Entity("MovieRolePerson", b =>
-                {
-                    b.HasOne("Models.Concrete.Entities.MovieRole", null)
-                        .WithMany()
-                        .HasForeignKey("MovieRolesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.Concrete.Entities.Person", null)
-                        .WithMany()
-                        .HasForeignKey("PersonsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Models.Concrete.Entities.AwardType", b =>
                 {
                     b.Navigation("Awards");
@@ -571,6 +559,10 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("Models.Concrete.Entities.Person", b =>
                 {
+                    b.Navigation("Actor");
+
+                    b.Navigation("Director");
+
                     b.Navigation("Movies");
                 });
 #pragma warning restore 612, 618

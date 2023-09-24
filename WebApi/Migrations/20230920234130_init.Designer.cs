@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repositories.Concrete.EFCore.Contexts;
 
@@ -11,9 +12,11 @@ using Repositories.Concrete.EFCore.Contexts;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    partial class MovieContextModelSnapshot : ModelSnapshot
+    [Migration("20230920234130_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,19 +25,19 @@ namespace WebApi.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Models.Concrete.Domains.Junctions.PersonGenre", b =>
+            modelBuilder.Entity("GenrePerson", b =>
                 {
-                    b.Property<int>("PersonId")
+                    b.Property<int>("GenresId")
                         .HasColumnType("int");
 
-                    b.Property<int>("GenreId")
+                    b.Property<int>("PersonsId")
                         .HasColumnType("int");
 
-                    b.HasKey("PersonId", "GenreId");
+                    b.HasKey("GenresId", "PersonsId");
 
-                    b.HasIndex("GenreId");
+                    b.HasIndex("PersonsId");
 
-                    b.ToTable("PersonGenres");
+                    b.ToTable("GenrePerson");
                 });
 
             modelBuilder.Entity("Models.Concrete.Entities.Actor", b =>
@@ -53,19 +56,21 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("Models.Concrete.Entities.Award", b =>
                 {
-                    b.Property<int>("AwardTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("MovieId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("AwardTypeId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("AwardTypeId", "MovieId");
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Date", "AwardTypeId");
+
+                    b.HasIndex("AwardTypeId");
 
                     b.HasIndex("MovieId");
 
@@ -211,7 +216,7 @@ namespace WebApi.Migrations
 
                     b.HasIndex("PersonId");
 
-                    b.ToTable("MoviePersons", (string)null);
+                    b.ToTable("MoviePerson");
                 });
 
             modelBuilder.Entity("Models.Concrete.Entities.Language", b =>
@@ -373,23 +378,19 @@ namespace WebApi.Migrations
                     b.ToTable("Persons");
                 });
 
-            modelBuilder.Entity("Models.Concrete.Domains.Junctions.PersonGenre", b =>
+            modelBuilder.Entity("GenrePerson", b =>
                 {
-                    b.HasOne("Models.Concrete.Entities.Genre", "Genre")
-                        .WithMany("Persons")
-                        .HasForeignKey("GenreId")
+                    b.HasOne("Models.Concrete.Entities.Genre", null)
+                        .WithMany()
+                        .HasForeignKey("GenresId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Models.Concrete.Entities.Person", "Person")
-                        .WithMany("Genres")
-                        .HasForeignKey("PersonId")
+                    b.HasOne("Models.Concrete.Entities.Person", null)
+                        .WithMany()
+                        .HasForeignKey("PersonsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Genre");
-
-                    b.Navigation("Person");
                 });
 
             modelBuilder.Entity("Models.Concrete.Entities.Actor", b =>
@@ -528,8 +529,6 @@ namespace WebApi.Migrations
             modelBuilder.Entity("Models.Concrete.Entities.Genre", b =>
                 {
                     b.Navigation("Movies");
-
-                    b.Navigation("Persons");
                 });
 
             modelBuilder.Entity("Models.Concrete.Entities.Language", b =>
@@ -563,8 +562,6 @@ namespace WebApi.Migrations
                     b.Navigation("Actor");
 
                     b.Navigation("Director");
-
-                    b.Navigation("Genres");
 
                     b.Navigation("Movies");
                 });
