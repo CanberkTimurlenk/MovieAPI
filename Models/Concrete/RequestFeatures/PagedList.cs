@@ -24,7 +24,7 @@ namespace Models.Concrete.RequestFeatures
             };
         }
 
-        public async static Task<PagedList<T>> AsPaged(IEnumerable<T> source,int count, RequestParameters requestParameters)
+        public static PagedList<T> AsPaged(IEnumerable<T> source,int count, RequestParameters requestParameters)
             
             => new PagedList<T>(source, count, requestParameters.PageNumber, requestParameters.PageSize);
 
