@@ -1,4 +1,5 @@
 
+using Microsoft.Extensions.Logging;
 using Presentation.AssemblyReference;
 
 using WebApi.Extensions;
@@ -23,6 +24,8 @@ builder.Services.RegisterServices();
 builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
+
+app.ConfigureExceptionHandler();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
