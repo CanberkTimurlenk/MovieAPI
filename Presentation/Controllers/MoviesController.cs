@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Models.Concrete.RequestModels.Update.Movie;
 using Models.Concrete.RequestModels.Insertion.Movie;
-using Models.Concrete.Entities;
-using Models.Concrete.RequestModels.Update.Actor;
 
 namespace Presentation.Controllers
 {
@@ -32,6 +30,13 @@ namespace Presentation.Controllers
             return CreatePaginatedResponse(result);
         }
 
+        [HttpGet("get-all")]
+        public async Task<IActionResult> GetAllMoviesAsync([FromQuery] MovieParameters requestParamaters)
+        {
+            var result = await _serviceManager.MovieService.GetAllMoviesAsync(requestParamaters);
+
+            return CreatePaginatedResponse(result);
+        }
 
 
         [HttpGet("get-by-release-status")]
