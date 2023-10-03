@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Models.Abstract.Entities;
 using Models.Abstract.RequestFeatures;
 using Models.Concrete.Entities;
 using Models.Concrete.Entities.Junctions;
@@ -16,10 +17,19 @@ namespace Repositories.Concrete.EFCore
 
         public MovieRepository(MovieContext context) : base(context)
         {
+        }
+
+        public async Task<PagedList<Movie>> GetAllMoviesAsync(Expression<Func<Movie, bool>> filter, MovieParameters movieParameters, bool trackChanges)
+        {
+            var query = GetAllByConditionAsQueryable(filter, trackChanges).Sort(movieParameters.OrderBy);
+
+            return trackChanges
+                                ? await query.ToPagedList(movieParameters)
+                                : await query.AsNoTracking().ToPagedList(movieParameters);
 
         }
 
-        public async Task<PagedList<Movie>> GetMoviesByLocationAsync(Expression<Func<Location, bool>> filter, RequestParameters requestParameters, bool trackChanges)
+        public async Task<PagedList<Movie>> GetMoviesByLocationAsync(Expression<Func<Location, bool>> filter, MovieParameters movieParameters, bool trackChanges)
         {
             var query = _context.Set<Location>().Where(filter)
                                                 .SelectMany(l => l.Movies)
@@ -27,12 +37,12 @@ namespace Repositories.Concrete.EFCore
 
 
             return trackChanges
-                                ? await query.ToPagedList(requestParameters)
-                                : await query.AsNoTrackingWithIdentityResolution().ToPagedList(requestParameters);
+                                ? await query.ToPagedList(movieParameters)
+                                : await query.AsNoTrackingWithIdentityResolution().ToPagedList(movieParameters);
 
         }
 
-        public async Task<PagedList<Movie>> GetMoviesWithAwardsAsync(Expression<Func<Movie, bool>> filter, RequestParameters requestParameters, bool trackChanges)
+        public async Task<PagedList<Movie>> GetMoviesWithAwardsAsync(Expression<Func<Movie, bool>> filter, MovieParameters movieParameters, bool trackChanges)
         {
             var query = _context.Set<Movie>().Where(filter)
                                              .Where(m => m.IsReleased)
@@ -41,11 +51,11 @@ namespace Repositories.Concrete.EFCore
 
 
             return trackChanges
-                                ? await query.ToPagedList(requestParameters)
-                                : await query.AsNoTrackingWithIdentityResolution().ToPagedList(requestParameters);
+                                ? await query.ToPagedList(movieParameters)
+                                : await query.AsNoTrackingWithIdentityResolution().ToPagedList(movieParameters);
         }
 
-        public async Task<PagedList<Movie>> GetMoviesByGenreAsync(Expression<Func<Genre, bool>> filter, RequestParameters requestParameters, bool trackChanges)
+        public async Task<PagedList<Movie>> GetMoviesByGenreAsync(Expression<Func<Genre, bool>> filter, MovieParameters movieParameters, bool trackChanges)
 
         {
             var query = _context.Set<Genre>().Where(filter)
@@ -53,8 +63,8 @@ namespace Repositories.Concrete.EFCore
                                              .Select(mg => mg.Movie);
 
             return trackChanges
-                                ? await query.ToPagedList(requestParameters)
-                                : await query.AsNoTrackingWithIdentityResolution().ToPagedList(requestParameters);
+                                ? await query.ToPagedList(movieParameters)
+                                : await query.AsNoTrackingWithIdentityResolution().ToPagedList(movieParameters);
         }
         public async Task CreateAsync(Movie movie, List<int> genres, List<int> locations, List<int> languages)
         {
@@ -72,7 +82,7 @@ namespace Repositories.Concrete.EFCore
                 movie.Languages.Add(new MovieLanguage { LanguageId = language });
 
             await _context.Movies.AddAsync(movie);
-            
+
         }
 
         /// <summary>
@@ -89,10 +99,9 @@ namespace Repositories.Concrete.EFCore
 
             return movie;
 
-
         }
 
-        public async Task<PagedList<Movie>> GetMoviesWithLanguagesAsync(Expression<Func<Movie, bool>> filter, RequestParameters requestParameters, bool trackChanges)
+        public async Task<PagedList<Movie>> GetMoviesWithLanguagesAsync(Expression<Func<Movie, bool>> filter, MovieParameters movieParameters, bool trackChanges)
         {
 
             var query = _context.Set<Movie>().Where(filter)
@@ -100,20 +109,20 @@ namespace Repositories.Concrete.EFCore
 
 
             return trackChanges
-                               ? await query.ToPagedList(requestParameters)
-                               : await query.AsNoTrackingWithIdentityResolution().ToPagedList(requestParameters);
+                               ? await query.ToPagedList(movieParameters)
+                               : await query.AsNoTrackingWithIdentityResolution().ToPagedList(movieParameters);
 
         }
 
-        public async Task<PagedList<Movie>> GetMoviesByPersonAsync(Expression<Func<Person, bool>> filter, RequestParameters requestParameters, bool trackChanges)
+        public async Task<PagedList<Movie>> GetMoviesByPersonAsync(Expression<Func<Person, bool>> filter, MovieParameters movieParameters, bool trackChanges)
         {
             var query = _context.Set<Person>().Where(filter)
                                               .SelectMany(p => p.Movies)
                                               .Select(m => m.Movie);
 
             return trackChanges
-                                ? await query.ToPagedList(requestParameters)
-                                : await query.AsNoTrackingWithIdentityResolution().ToPagedList(requestParameters);
+                                ? await query.ToPagedList(movieParameters)
+                                : await query.AsNoTrackingWithIdentityResolution().ToPagedList(movieParameters);
 
         }
 
@@ -173,14 +182,14 @@ namespace Repositories.Concrete.EFCore
         }
         public async Task AddRangeMovieLocationsAsync(int movieId, IEnumerable<int> locationIds)
         {
-           
+
             var movieLocationList = new List<MovieLocation>();
 
             foreach (var id in locationIds)
                 movieLocationList.Add(new MovieLocation { MovieId = movieId, LocationId = id, });
 
             await _context.Set<MovieLocation>().AddRangeAsync(movieLocationList);
-            
+
 
         }
         public async Task<IEnumerable<int>> GetLocationIds(int movieId)
@@ -222,7 +231,7 @@ namespace Repositories.Concrete.EFCore
         public async Task<IEnumerable<int>> GetLanguageIds(int movieId)
         {
             return await _context.Set<MovieLanguage>().Where(m => m.MovieId == movieId)
-                                                   .AsNoTracking() 
+                                                   .AsNoTracking()
                                                    .Select(m => m.LanguageId)
                                                    .ToListAsync();
         }

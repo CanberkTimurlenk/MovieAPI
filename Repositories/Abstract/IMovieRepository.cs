@@ -8,12 +8,13 @@ namespace Repositories.Abstract
 {
     public interface IMovieRepository : IBaseRepository<Movie>
     {
-        Task<PagedList<Movie>> GetMoviesByLocationAsync(Expression<Func<Location, bool>> filter, RequestParameters requestParameters, bool trackChanges);
-        Task<PagedList<Movie>> GetMoviesWithAwardsAsync(Expression<Func<Movie, bool>> filter, RequestParameters requestParameters, bool trackChanges);
-        Task<PagedList<Movie>> GetMoviesByGenreAsync(Expression<Func<Genre, bool>> filter, RequestParameters requestParameters, bool trackChanges);
+        Task<PagedList<Movie>> GetMoviesByLocationAsync(Expression<Func<Location, bool>> filter, MovieParameters requestParameters, bool trackChanges);
+        Task<PagedList<Movie>> GetMoviesWithAwardsAsync(Expression<Func<Movie, bool>> filter, MovieParameters requestParameters, bool trackChanges);
+        Task<PagedList<Movie>> GetMoviesByGenreAsync(Expression<Func<Genre, bool>> filter, MovieParameters requestParameters, bool trackChanges);
         Task<Movie> GetMovieWithDetailsAsync(int id);
-        Task<PagedList<Movie>> GetMoviesWithLanguagesAsync(Expression<Func<Movie, bool>> filter, RequestParameters requestParameters, bool trackChanges);
-        Task<PagedList<Movie>> GetMoviesByPersonAsync(Expression<Func<Person, bool>> filter, RequestParameters requestParameters, bool trackChanges);
+        Task<PagedList<Movie>> GetAllMoviesAsync(Expression<Func<Movie, bool>> filter, MovieParameters movieParameters, bool trackChanges);
+        Task<PagedList<Movie>> GetMoviesWithLanguagesAsync(Expression<Func<Movie, bool>> filter, MovieParameters requestParameters, bool trackChanges);
+        Task<PagedList<Movie>> GetMoviesByPersonAsync(Expression<Func<Person, bool>> filter, MovieParameters requestParameters, bool trackChanges);
         Task CreateAsync(Movie movie, List<int> genres, List<int> locations, List<int> languages);
 
 
