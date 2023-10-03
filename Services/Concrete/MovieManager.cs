@@ -20,9 +20,19 @@ namespace Services.Concrete
             _mapper = mapper;
         }
 
-        public async Task<(IEnumerable<MovieResponse> movies, MetaData metaData)> GetMoviesByTitleAsync(string title, MovieParameters requestParameters)
+
+        public async Task<(IEnumerable<MovieResponse> movies, MetaData metaData)> GetAllMoviesAsync(MovieParameters requestParameters)
         {
             
+            var movies = await _repositoryManager.Movie.GetAllMoviesAsync(m => true, requestParameters, false);
+
+            return (_mapper.Map<IEnumerable<MovieResponse>>(movies), movies.MetaData);
+        }
+
+
+        public async Task<(IEnumerable<MovieResponse> movies, MetaData metaData)> GetMoviesByTitleAsync(string title, MovieParameters requestParameters)
+        {
+
             var movies = await _repositoryManager.Movie.GetAllByConditionAsync(m => m.Title.Contains(title), requestParameters, false);
 
             return (_mapper.Map<IEnumerable<MovieResponse>>(movies), movies.MetaData);

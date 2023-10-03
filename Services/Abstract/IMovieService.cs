@@ -26,6 +26,7 @@ namespace Services.Abstract
         Task PartiallyUpdateMovieGenresAsync(int movieId, int genreIdToUpdated, IEnumerable<int> genresToUpdated);
         Task AddRangeMovieGenresAsync(int movieId, IEnumerable<int> movieGenresToAdded);
         Task DeleteRangeMovieGenresAsync(int movieId, IEnumerable<int> genreIdsToDelete);
+        Task<(IEnumerable<MovieResponse> movies, MetaData metaData)> GetAllMoviesAsync(MovieParameters requestParameters);
 
         Task<MovieLocationRequestForUpdate> GetLocationIdsForPatch(int id);
         Task PartiallyUpdateMovieLocationsAsync(int movieId, int locationIdToReplace, IEnumerable<int> locationIdsToUpdate);
