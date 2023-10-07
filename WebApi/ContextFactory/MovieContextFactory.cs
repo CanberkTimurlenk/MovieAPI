@@ -14,7 +14,7 @@ namespace WebApi.ContextFactory
                 .Build();
 
             var builder = new DbContextOptionsBuilder<MovieContext>()
-                .UseSqlServer(configuration.GetConnectionString("sqlConnection"),
+                .UseNpgsql(configuration.GetConnectionString("sqlConnection"),
                 prj => prj.MigrationsAssembly("WebApi")
                 );
 

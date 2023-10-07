@@ -13,7 +13,7 @@ namespace WebApi.Extensions
         public static void ConfigureSqlContext(this IServiceCollection services, IConfiguration configuration)
 
             => services.AddDbContext<MovieContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("sqlConnection")));
+                options.UseNpgsql(configuration.GetConnectionString("sqlConnection")));
 
         public static void ConfigureServiceManager(this IServiceCollection services)
 

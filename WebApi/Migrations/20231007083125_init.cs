@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -17,10 +18,10 @@ namespace WebApi.Migrations
                 name: "AwardTypes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -31,9 +32,9 @@ namespace WebApi.Migrations
                 name: "Genres",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -44,9 +45,9 @@ namespace WebApi.Migrations
                 name: "Languages",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -57,9 +58,9 @@ namespace WebApi.Migrations
                 name: "Locations",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -70,12 +71,12 @@ namespace WebApi.Migrations
                 name: "Movies",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Title = table.Column<string>(type: "text", nullable: false),
                     ReleaseDate = table.Column<DateTime>(type: "date", nullable: false),
-                    DurationAsMinute = table.Column<int>(type: "int", nullable: false),
-                    IsReleased = table.Column<bool>(type: "bit", nullable: false),
+                    DurationAsMinute = table.Column<int>(type: "integer", nullable: false),
+                    IsReleased = table.Column<bool>(type: "boolean", nullable: false),
                     LastModified = table.Column<DateTime>(type: "date", nullable: true)
                 },
                 constraints: table =>
@@ -87,12 +88,12 @@ namespace WebApi.Migrations
                 name: "Persons",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Firstname = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Lastname = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Firstname = table.Column<string>(type: "text", nullable: false),
+                    Lastname = table.Column<string>(type: "text", nullable: false),
+                    BirthDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -103,14 +104,14 @@ namespace WebApi.Migrations
                 name: "Awards",
                 columns: table => new
                 {
-                    AwardTypeId = table.Column<int>(type: "int", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    MovieId = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    AwardTypeId = table.Column<int>(type: "integer", nullable: false),
+                    MovieId = table.Column<int>(type: "integer", nullable: false),
+                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Awards", x => new { x.Date, x.AwardTypeId });
+                    table.PrimaryKey("PK_Awards", x => new { x.AwardTypeId, x.MovieId });
                     table.ForeignKey(
                         name: "FK_Awards_AwardTypes_AwardTypeId",
                         column: x => x.AwardTypeId,
@@ -129,11 +130,11 @@ namespace WebApi.Migrations
                 name: "MovieDetails",
                 columns: table => new
                 {
-                    MovieId = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Synopsis = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Budget = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Revenue = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    MovieId = table.Column<int>(type: "integer", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    Synopsis = table.Column<string>(type: "text", nullable: false),
+                    Budget = table.Column<decimal>(type: "numeric", nullable: false),
+                    Revenue = table.Column<decimal>(type: "numeric", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -150,8 +151,8 @@ namespace WebApi.Migrations
                 name: "MovieGenres",
                 columns: table => new
                 {
-                    MovieId = table.Column<int>(type: "int", nullable: false),
-                    GenreId = table.Column<int>(type: "int", nullable: false)
+                    MovieId = table.Column<int>(type: "integer", nullable: false),
+                    GenreId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -174,8 +175,8 @@ namespace WebApi.Migrations
                 name: "MovieLanguages",
                 columns: table => new
                 {
-                    MovieId = table.Column<int>(type: "int", nullable: false),
-                    LanguageId = table.Column<int>(type: "int", nullable: false)
+                    MovieId = table.Column<int>(type: "integer", nullable: false),
+                    LanguageId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -198,8 +199,8 @@ namespace WebApi.Migrations
                 name: "MovieLocations",
                 columns: table => new
                 {
-                    MovieId = table.Column<int>(type: "int", nullable: false),
-                    LocationId = table.Column<int>(type: "int", nullable: false)
+                    MovieId = table.Column<int>(type: "integer", nullable: false),
+                    LocationId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -222,8 +223,8 @@ namespace WebApi.Migrations
                 name: "Actors",
                 columns: table => new
                 {
-                    PersonId = table.Column<int>(type: "int", nullable: false),
-                    AlternativeName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    PersonId = table.Column<int>(type: "integer", nullable: false),
+                    AlternativeName = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -240,8 +241,8 @@ namespace WebApi.Migrations
                 name: "Directors",
                 columns: table => new
                 {
-                    PersonId = table.Column<int>(type: "int", nullable: false),
-                    AlternativeName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    PersonId = table.Column<int>(type: "integer", nullable: false),
+                    AlternativeName = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -255,47 +256,47 @@ namespace WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "GenrePerson",
+                name: "MoviePersons",
                 columns: table => new
                 {
-                    GenresId = table.Column<int>(type: "int", nullable: false),
-                    PersonsId = table.Column<int>(type: "int", nullable: false)
+                    MovieId = table.Column<int>(type: "integer", nullable: false),
+                    PersonId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GenrePerson", x => new { x.GenresId, x.PersonsId });
+                    table.PrimaryKey("PK_MoviePersons", x => new { x.MovieId, x.PersonId });
                     table.ForeignKey(
-                        name: "FK_GenrePerson_Genres_GenresId",
-                        column: x => x.GenresId,
-                        principalTable: "Genres",
+                        name: "FK_MoviePersons_Movies_MovieId",
+                        column: x => x.MovieId,
+                        principalTable: "Movies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_GenrePerson_Persons_PersonsId",
-                        column: x => x.PersonsId,
+                        name: "FK_MoviePersons_Persons_PersonId",
+                        column: x => x.PersonId,
                         principalTable: "Persons",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "MoviePerson",
+                name: "PersonGenres",
                 columns: table => new
                 {
-                    MovieId = table.Column<int>(type: "int", nullable: false),
-                    PersonId = table.Column<int>(type: "int", nullable: false)
+                    PersonId = table.Column<int>(type: "integer", nullable: false),
+                    GenreId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MoviePerson", x => new { x.MovieId, x.PersonId });
+                    table.PrimaryKey("PK_PersonGenres", x => new { x.PersonId, x.GenreId });
                     table.ForeignKey(
-                        name: "FK_MoviePerson_Movies_MovieId",
-                        column: x => x.MovieId,
-                        principalTable: "Movies",
+                        name: "FK_PersonGenres_Genres_GenreId",
+                        column: x => x.GenreId,
+                        principalTable: "Genres",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_MoviePerson_Persons_PersonId",
+                        name: "FK_PersonGenres_Persons_PersonId",
                         column: x => x.PersonId,
                         principalTable: "Persons",
                         principalColumn: "Id",
@@ -327,19 +328,9 @@ namespace WebApi.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Awards_AwardTypeId",
-                table: "Awards",
-                column: "AwardTypeId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Awards_MovieId",
                 table: "Awards",
                 column: "MovieId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_GenrePerson_PersonsId",
-                table: "GenrePerson",
-                column: "PersonsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_MovieGenres_GenreId",
@@ -357,9 +348,14 @@ namespace WebApi.Migrations
                 column: "LocationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_MoviePerson_PersonId",
-                table: "MoviePerson",
+                name: "IX_MoviePersons_PersonId",
+                table: "MoviePersons",
                 column: "PersonId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PersonGenres_GenreId",
+                table: "PersonGenres",
+                column: "GenreId");
         }
 
         /// <inheritdoc />
@@ -375,9 +371,6 @@ namespace WebApi.Migrations
                 name: "Directors");
 
             migrationBuilder.DropTable(
-                name: "GenrePerson");
-
-            migrationBuilder.DropTable(
                 name: "MovieDetails");
 
             migrationBuilder.DropTable(
@@ -390,13 +383,13 @@ namespace WebApi.Migrations
                 name: "MovieLocations");
 
             migrationBuilder.DropTable(
-                name: "MoviePerson");
+                name: "MoviePersons");
+
+            migrationBuilder.DropTable(
+                name: "PersonGenres");
 
             migrationBuilder.DropTable(
                 name: "AwardTypes");
-
-            migrationBuilder.DropTable(
-                name: "Genres");
 
             migrationBuilder.DropTable(
                 name: "Languages");
@@ -406,6 +399,9 @@ namespace WebApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "Movies");
+
+            migrationBuilder.DropTable(
+                name: "Genres");
 
             migrationBuilder.DropTable(
                 name: "Persons");

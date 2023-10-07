@@ -2,9 +2,9 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Repositories.Concrete.EFCore.Contexts;
 
 #nullable disable
@@ -12,8 +12,8 @@ using Repositories.Concrete.EFCore.Contexts;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    [Migration("20230920234238_CreateTrigger_Prevent_Duplicate_Awards")]
-    partial class CreateTrigger_Prevent_Duplicate_Awards
+    [Migration("20231007103836_Create_Trigger_Prevent_Duplicate_Awards_for_AwardTypeId_and_DateAsYear")]
+    partial class Create_Trigger_Prevent_Duplicate_Awards_for_AwardTypeId_and_DateAsYear
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,33 +21,33 @@ namespace WebApi.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.11")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("GenrePerson", b =>
+            modelBuilder.Entity("Models.Concrete.Domains.Junctions.PersonGenre", b =>
                 {
-                    b.Property<int>("GenresId")
-                        .HasColumnType("int");
+                    b.Property<int>("PersonId")
+                        .HasColumnType("integer");
 
-                    b.Property<int>("PersonsId")
-                        .HasColumnType("int");
+                    b.Property<int>("GenreId")
+                        .HasColumnType("integer");
 
-                    b.HasKey("GenresId", "PersonsId");
+                    b.HasKey("PersonId", "GenreId");
 
-                    b.HasIndex("PersonsId");
+                    b.HasIndex("GenreId");
 
-                    b.ToTable("GenrePerson");
+                    b.ToTable("PersonGenres");
                 });
 
             modelBuilder.Entity("Models.Concrete.Entities.Actor", b =>
                 {
                     b.Property<int>("PersonId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("AlternativeName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("PersonId");
 
@@ -56,21 +56,19 @@ namespace WebApi.Migrations
 
             modelBuilder.Entity("Models.Concrete.Entities.Award", b =>
                 {
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("AwardTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("integer");
 
                     b.Property<int>("MovieId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    b.HasKey("Date", "AwardTypeId");
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
 
-                    b.HasIndex("AwardTypeId");
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.HasKey("AwardTypeId", "MovieId");
 
                     b.HasIndex("MovieId");
 
@@ -84,17 +82,17 @@ namespace WebApi.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -104,11 +102,11 @@ namespace WebApi.Migrations
             modelBuilder.Entity("Models.Concrete.Entities.Director", b =>
                 {
                     b.Property<int>("PersonId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("AlternativeName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("PersonId");
 
@@ -119,13 +117,13 @@ namespace WebApi.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -162,10 +160,10 @@ namespace WebApi.Migrations
             modelBuilder.Entity("Models.Concrete.Entities.Junctions.MovieGenre", b =>
                 {
                     b.Property<int>("MovieId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("GenreId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("MovieId", "GenreId");
 
@@ -177,10 +175,10 @@ namespace WebApi.Migrations
             modelBuilder.Entity("Models.Concrete.Entities.Junctions.MovieLanguage", b =>
                 {
                     b.Property<int>("MovieId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("LanguageId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("MovieId", "LanguageId");
 
@@ -192,10 +190,10 @@ namespace WebApi.Migrations
             modelBuilder.Entity("Models.Concrete.Entities.Junctions.MovieLocation", b =>
                 {
                     b.Property<int>("MovieId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("LocationId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("MovieId", "LocationId");
 
@@ -207,29 +205,29 @@ namespace WebApi.Migrations
             modelBuilder.Entity("Models.Concrete.Entities.Junctions.MoviePerson", b =>
                 {
                     b.Property<int>("MovieId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("PersonId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("MovieId", "PersonId");
 
                     b.HasIndex("PersonId");
 
-                    b.ToTable("MoviePerson");
+                    b.ToTable("MoviePersons", (string)null);
                 });
 
             modelBuilder.Entity("Models.Concrete.Entities.Language", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -240,13 +238,13 @@ namespace WebApi.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -257,15 +255,15 @@ namespace WebApi.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("DurationAsMinute")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<bool>("IsReleased")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("date");
@@ -275,7 +273,7 @@ namespace WebApi.Migrations
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -330,21 +328,21 @@ namespace WebApi.Migrations
             modelBuilder.Entity("Models.Concrete.Entities.MovieDetail", b =>
                 {
                     b.Property<int>("MovieId")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<decimal>("Budget")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("numeric");
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<decimal>("Revenue")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("numeric");
 
                     b.Property<string>("Synopsis")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("MovieId");
 
@@ -355,42 +353,46 @@ namespace WebApi.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("BirthDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Firstname")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Lastname")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
                     b.ToTable("Persons");
                 });
 
-            modelBuilder.Entity("GenrePerson", b =>
+            modelBuilder.Entity("Models.Concrete.Domains.Junctions.PersonGenre", b =>
                 {
-                    b.HasOne("Models.Concrete.Entities.Genre", null)
-                        .WithMany()
-                        .HasForeignKey("GenresId")
+                    b.HasOne("Models.Concrete.Entities.Genre", "Genre")
+                        .WithMany("Persons")
+                        .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Models.Concrete.Entities.Person", null)
-                        .WithMany()
-                        .HasForeignKey("PersonsId")
+                    b.HasOne("Models.Concrete.Entities.Person", "Person")
+                        .WithMany("Genres")
+                        .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Genre");
+
+                    b.Navigation("Person");
                 });
 
             modelBuilder.Entity("Models.Concrete.Entities.Actor", b =>
@@ -529,6 +531,8 @@ namespace WebApi.Migrations
             modelBuilder.Entity("Models.Concrete.Entities.Genre", b =>
                 {
                     b.Navigation("Movies");
+
+                    b.Navigation("Persons");
                 });
 
             modelBuilder.Entity("Models.Concrete.Entities.Language", b =>
@@ -562,6 +566,8 @@ namespace WebApi.Migrations
                     b.Navigation("Actor");
 
                     b.Navigation("Director");
+
+                    b.Navigation("Genres");
 
                     b.Navigation("Movies");
                 });
