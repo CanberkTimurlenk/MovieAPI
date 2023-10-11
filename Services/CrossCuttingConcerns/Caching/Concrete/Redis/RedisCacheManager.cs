@@ -25,9 +25,9 @@ namespace Services.CrossCuttingConcerns.Caching.Concrete.Redis
 
         }
 
-        public async Task<object> Get(string key, Type type)
+        public object Get(string key, Type type)
         {
-            var jsonData = await _cache.GetStringAsync(key);
+            var jsonData = _cache.GetString(key);
 
             if (jsonData is null)
                 return default;

@@ -4,6 +4,6 @@
     {
         T Get<T>(string cacheKey);
         void Add(string key, object data, TimeSpan cacheDuration);
-        Task<IEnumerable<object>> Get(string key, Type type);
+        object Get(string key, Type type);
     }
 }
