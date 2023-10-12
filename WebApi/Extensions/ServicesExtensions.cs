@@ -1,10 +1,9 @@
 ﻿using Repositories.Concrete.EFCore.Contexts;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using Services.Concrete;
 using Services.Abstract;
 using Repositories.Abstract;
 using Repositories.Concrete.EFCore;
+using Services.Concrete;
 
 namespace WebApi.Extensions
 {
@@ -14,6 +13,16 @@ namespace WebApi.Extensions
 
             => services.AddDbContext<MovieContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("sqlConnection")));
+
+        public static void ConfigureRedis(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = configuration.GetConnectionString("redisConn");
+                options.InstanceName = "MovieCatalog";
+            });
+        }
+
 
         public static void ConfigureServiceManager(this IServiceCollection services)
 
@@ -55,6 +64,5 @@ namespace WebApi.Extensions
 
     }
 
-
-
+}
 }
