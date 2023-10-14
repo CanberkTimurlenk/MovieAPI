@@ -30,6 +30,15 @@ namespace Presentation.Controllers
             return CreatePaginatedResponse(result);
         }
 
+        [HttpGet("upcoming-in-30-days")]
+        public async Task<IActionResult> GetUpcomingMoviesIn30Days([FromQuery] MovieParameters requestParamaters)
+        {
+            var result = await _serviceManager.MovieService.GetUpcomingMoviesIn30Days(requestParamaters);
+
+            return Ok(result);
+
+        }
+
         [HttpGet("get-all")]
         public async Task<IActionResult> GetAllMoviesAsync([FromQuery] MovieParameters requestParamaters)
         {
@@ -102,7 +111,7 @@ namespace Presentation.Controllers
         }
 
 
-      
+
 
         [HttpDelete("delete/{movie_id:int}")]
         public async Task<IActionResult> DeleteByIdAsync([FromRoute] int movieId)
