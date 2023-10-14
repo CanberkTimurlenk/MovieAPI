@@ -47,7 +47,15 @@ namespace Services.DependencyResolvers.Autofac
 
             builder.RegisterType<RedisCacheManager>().As<ICacheService>().SingleInstance();
 
-           
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+
+            builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces()
+                .EnableInterfaceInterceptors(new ProxyGenerationOptions()
+                {
+                    Selector = new AspectInterceptorSelector()
+                }).InstancePerLifetimeScope();
+
+
         }
     }
 }
