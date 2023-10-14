@@ -1,7 +1,9 @@
-
-using Microsoft.Extensions.Logging;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Presentation.AssemblyReference;
-
+using Services.DependencyResolvers.Autofac;
+using Services.DependencyResolvers.Autofac.CoreModule;
+using Services.DependencyResolvers.Extensions;
 using WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,15 +15,15 @@ builder.Services.AddControllers()
                 .AddApplicationPart(typeof(AssemblyReference).Assembly);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer(); 
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 builder.Services.ConfigureSqlContext(builder.Configuration);
-builder.Services.ConfigureRepositoryManager();
-builder.Services.ConfigureServiceManager();
-builder.Services.RegisterRepositories();
-builder.Services.RegisterServices();
 builder.Services.AddAutoMapper(typeof(Program));
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+
+
 
 var app = builder.Build();
 
