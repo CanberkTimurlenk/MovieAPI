@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.JsonPatch;
-using Models.Abstract.RequestFeatures;
-using Models.Concrete.Entities;
+﻿using Models.Concrete.Entities;
 using Models.Concrete.RequestFeatures;
 using Models.Concrete.RequestModels.Insertion.Movie;
 using Models.Concrete.RequestModels.Update.Movie;
@@ -26,6 +24,7 @@ namespace Services.Abstract
         Task PartiallyUpdateMovieGenresAsync(int movieId, int genreIdToUpdated, IEnumerable<int> genresToUpdated);
         Task AddRangeMovieGenresAsync(int movieId, IEnumerable<int> movieGenresToAdded);
         Task DeleteRangeMovieGenresAsync(int movieId, IEnumerable<int> genreIdsToDelete);
+        Task<IEnumerable<MovieResponse>> GetUpcomingMoviesIn30Days(MovieParameters requestParameters);
         Task<(IEnumerable<MovieResponse> movies, MetaData metaData)> GetAllMoviesAsync(MovieParameters requestParameters);
 
         Task<MovieLocationRequestForUpdate> GetLocationIdsForPatch(int id);

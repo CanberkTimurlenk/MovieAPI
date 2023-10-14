@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.IdentityModel.Tokens;
 using Models.Concrete.Entities;
 using Models.Concrete.RequestFeatures;
 using Models.Concrete.RequestModels.Insertion.Movie;
@@ -6,6 +7,9 @@ using Models.Concrete.RequestModels.Update.Movie;
 using Models.Concrete.ResponseModels.Movie;
 using Repositories.Abstract;
 using Services.Abstract;
+using Services.Aspects.Caching;
+using Services.CrossCuttingConcerns.Caching.Abstract;
+using System.Collections;
 
 namespace Services.Concrete
 {
@@ -13,17 +17,35 @@ namespace Services.Concrete
     {
         private readonly IRepositoryManager _repositoryManager;
         private readonly IMapper _mapper;
+        private readonly ICacheService _cache;
 
-        public MovieManager(IRepositoryManager repositoryManager, IMapper mapper)
+        public MovieManager(IRepositoryManager repositoryManager, IMapper mapper, ICacheService cache)
         {
             _repositoryManager = repositoryManager;
             _mapper = mapper;
+            _cache = cache;
         }
 
+        [CacheAspect(nameof(GetUpcomingMoviesIn30Days), 24)]
+        public async Task<IEnumerable<MovieResponse>> GetUpcomingMoviesIn30Days(MovieParameters requestParameters)
+        {
+            var thirtyDaysFromNow = DateTime.Now.AddDays(30);
+
+            var movies = await _repositoryManager.Movie.GetAllMoviesAsync(
+                                                            m => m.IsReleased.Equals(false)
+                                                                && m.ReleaseDate <= thirtyDaysFromNow
+                                                                && m.ReleaseDate >= DateTime.Now,
+                                                            requestParameters,
+                                                            false);
+
+            var mappedResult = _mapper.Map<IEnumerable<MovieResponse>>(movies);
+            return mappedResult;
+
+        }
 
         public async Task<(IEnumerable<MovieResponse> movies, MetaData metaData)> GetAllMoviesAsync(MovieParameters requestParameters)
         {
-            
+
             var movies = await _repositoryManager.Movie.GetAllMoviesAsync(m => true, requestParameters, false);
 
             return (_mapper.Map<IEnumerable<MovieResponse>>(movies), movies.MetaData);
