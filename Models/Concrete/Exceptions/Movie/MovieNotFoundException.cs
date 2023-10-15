@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Models.Concrete.Exceptions.Common;
 
-namespace Models.Concrete.Exceptions
+namespace Models.Concrete.Exceptions.Movie
 {
     public sealed class MovieNotFoundException : NotFoundException
     {
