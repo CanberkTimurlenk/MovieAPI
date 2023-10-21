@@ -9,8 +9,7 @@ namespace Models.Concrete.Exceptions.User
 {
     public class RefreshTokenBadRequestException : BadRequestException
     {
-        public RefreshTokenBadRequestException(string message) : base(message)
-        {
-        }
+        public RefreshTokenBadRequestException(string message) : base(message) { }
+
     }
 }
