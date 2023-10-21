@@ -8,11 +8,11 @@ namespace Repositories.Concrete.EFCore.Extensions
         public static IQueryable<Movie> Sort(this IQueryable<Movie> movie, string orderByQueryString)
         {
             if (string.IsNullOrWhiteSpace(orderByQueryString))
-                return movie;
+                return movie.OrderBy(m => m.Id); 
 
             var orderQuery = OrderQueryBuilder<Movie>.CreateQueryString(orderByQueryString);
 
-            if (string.IsNullOrWhiteSpace(orderQuery))
+            if (string.IsNullOrEmpty(orderQuery))
                 return movie.OrderBy(m => m.Id);
 
             return movie.OrderBy(orderQuery);
