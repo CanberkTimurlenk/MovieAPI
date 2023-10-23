@@ -4,16 +4,16 @@ using Models.Concrete.Entities;
 using Models.Concrete.Entities.Junctions;
 using Models.Concrete.Domains.Junctions;
 
+using Models.Concrete.Domain;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
 namespace Repositories.Concrete.EFCore.Contexts
 {
-    public class MovieContext : DbContext
+    public class MovieContext : IdentityDbContext<User>
     {
-        public MovieContext(DbContextOptions options) : base(options)
+        public MovieContext(DbContextOptions<MovieContext> options) : base(options)
         {
-
-        }
-      
-        
+        }              
         public DbSet<AwardType> AwardTypes { get; set; }
         public DbSet<Award> Awards { get; set; }
         public DbSet<Genre> Genres { get; set; }
@@ -38,6 +38,7 @@ namespace Repositories.Concrete.EFCore.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
