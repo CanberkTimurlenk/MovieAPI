@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Repositories.Concrete.EFCore.Contexts;
@@ -11,9 +12,11 @@ using Repositories.Concrete.EFCore.Contexts;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(MovieContext))]
-    partial class MovieContextModelSnapshot : ModelSnapshot
+    [Migration("20231014200819_Add_Asp_Net_Identity")]
+    partial class Add_Asp_Net_Identity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,15 +53,15 @@ namespace WebApi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "5d787afb-c171-4e62-ba14-5df010a5c28d",
-                            ConcurrencyStamp = "b173085b-e29e-40c6-b736-a9fbfdbd6bac",
+                            Id = "c32eea00-5230-4e0a-9c9f-f5b169decf22",
+                            ConcurrencyStamp = "54d186fb-69b4-4a17-b452-2fe2cfaadfe6",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "2ee3c2cd-06aa-411d-853a-e55dbc9bc1c6",
-                            ConcurrencyStamp = "28492792-181b-46db-9fc7-068e0d46fb50",
+                            Id = "a940a91a-c4b2-4be5-878d-25b3e9e55621",
+                            ConcurrencyStamp = "7fcff81d-f8f3-477c-aecc-c0154a606c23",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -217,12 +220,6 @@ namespace WebApi.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
-
-                    b.Property<string>("RefreshToken")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("RefreshTokenExpiryTime")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
