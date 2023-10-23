@@ -44,6 +44,7 @@ namespace Services.DependencyResolvers.Autofac
             builder.RegisterType<MovieDetailManager>().As<IMovieDetailService>().InstancePerLifetimeScope();
             builder.RegisterType<ActorManager>().As<IActorService>().InstancePerLifetimeScope();
             builder.RegisterType<DirectorManager>().As<IDirectorService>().InstancePerLifetimeScope();
+            builder.RegisterType<AuthenticationManager>().As<IAuthenticationService>().InstancePerLifetimeScope();
 
             builder.RegisterType<RedisCacheManager>().As<ICacheService>().SingleInstance();
 

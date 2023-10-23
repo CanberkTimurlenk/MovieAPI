@@ -12,7 +12,8 @@
         public IAwardService AwardService { get; }
         public IActorService ActorService { get; }
         public IDirectorService DirectorService { get; }
+        public IAuthenticationService AuthenticationService { get; }
 
-        
+
     }
 }

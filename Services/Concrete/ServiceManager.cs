@@ -14,11 +14,12 @@ namespace Services.Concrete
         private readonly IAwardTypeService _awardTypeService;
         private readonly IActorService _actorService;
         private readonly IDirectorService _directorService;
+        private readonly IAuthenticationService _authenticationService;
 
         public ServiceManager(IMovieService movieService, IGenreService genreService, ILocationService locationService,
             ILanguageService languageService, IMovieDetailService movieDetailService, IPersonService personService,
-            IAwardService awardService, IAwardTypeService awardTypeService, IActorService actorService, 
-            IDirectorService directorService)
+            IAwardService awardService, IAwardTypeService awardTypeService, IActorService actorService,
+            IDirectorService directorService, IAuthenticationService authenticationService)
         {
             _movieService = movieService;
             _genreService = genreService;
@@ -30,6 +31,7 @@ namespace Services.Concrete
             _awardTypeService = awardTypeService;
             _actorService = actorService;
             _directorService = directorService;
+            _authenticationService = authenticationService;
         }
 
         public IMovieService MovieService => _movieService;
@@ -42,6 +44,7 @@ namespace Services.Concrete
         public IPersonService PersonService => _personService;
         public IActorService ActorService => _actorService;
         public IDirectorService DirectorService => _directorService;
+        public IAuthenticationService AuthenticationService => _authenticationService;
 
 
     }
