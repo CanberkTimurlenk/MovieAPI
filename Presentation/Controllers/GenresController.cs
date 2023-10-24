@@ -6,7 +6,6 @@ using Models.Concrete.RequestModels.Update.Actor;
 using Models.Concrete.RequestModels.Update.Genre;
 using Services.Abstract;
 
-
 namespace Presentation.Controllers
 {
     [ApiController]
@@ -23,7 +22,7 @@ namespace Presentation.Controllers
 
 
         [HttpGet]
-        [Route("get/{genre_id:int}")]
+        [Route("{genre_id:int}")]
         public IActionResult FindByIdAsync([FromRoute(Name = "genre_id")] int genreId)
         {
             _serviceManager.GenreService.FindByIdAsync(genreId);
@@ -32,7 +31,7 @@ namespace Presentation.Controllers
         }
 
         [HttpDelete]
-        [Route("delete/{genre_id:int}")]
+        [Route("{genre_id:int}")]
         public IActionResult DeleteByIdAsync([FromRoute(Name = "genre_id")] int genreId)
         {
             _serviceManager.GenreService.DeleteByIdAsync(genreId);
@@ -48,7 +47,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPatch]
-        [Route("update/{genre_id:int}")]
+        [Route("{genre_id:int}")]
         public async Task<IActionResult> PartiallyUpdateAsync([FromRoute(Name = "genre_id")] int genreId, [FromBody] JsonPatchDocument<GenreRequestForUpdate> genre)
         {
             var patchData = await _serviceManager.GenreService.GetGenreForPatchAsync(genreId);
@@ -61,7 +60,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPut]
-        [Route("update/{genre_id:int}")]
+        [Route("{genre_id:int}")]
         public async Task<IActionResult> UpdateAsync([FromRoute(Name = "genre_id")] int genreId, GenreRequestForUpdate genre)
         {
 

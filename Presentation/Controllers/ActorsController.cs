@@ -3,11 +3,6 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Models.Concrete.RequestModels.Insertion.Person;
 using Models.Concrete.RequestModels.Update.Actor;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Services.Abstract;
 
 namespace Presentation.Controllers
@@ -25,7 +20,7 @@ namespace Presentation.Controllers
 
 
         [HttpGet]
-        [Route("get/{person_id:int}")]
+        [Route("{person_id:int}")]
         public async Task<IActionResult> GetDirectorInformationByIdPersonIdAsync([FromRoute(Name = "person_id")] int personId)
         {
             await _serviceManager.DirectorService.FindByIdAsync(personId);
@@ -34,7 +29,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPost]
-        [Route("add/{person_id:int}")]
+        [Route("{person_id:int}")]
         public async Task<IActionResult> AddActorInformationAsync([FromRoute(Name = "person_id")] int personId, [FromBody] ActorRequestForInsertion actorRequestForInsertion)
         {
 
@@ -44,7 +39,7 @@ namespace Presentation.Controllers
         }
 
         [HttpDelete]
-        [Route("delete/{person_id:int}")]
+        [Route("{person_id:int}")]
         public async Task<IActionResult> DeleteActorInformationByIdAsync([FromRoute(Name = "person_id")] int personId)
         {
             await _serviceManager.ActorService.DeleteActorInformationAsync(personId);
@@ -53,7 +48,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPatch]
-        [Route("update/{person_id:int}")]
+        [Route("{person_id:int}")]
         public async Task<IActionResult> ReplaceActorInformationByPersonId([FromRoute(Name = "person_id")] int personId, JsonPatchDocument<ActorRequestForUpdate> actor)
         {
             if (!actor.Operations.All(op => op.OperationType == OperationType.Replace))
@@ -70,7 +65,7 @@ namespace Presentation.Controllers
 
 
         [HttpPut]
-        [Route("update/{person_id:int}")]
+        [Route("{person_id:int}")]
         public async Task<IActionResult> UpdateActorInformationByPersonIdAsync([FromRoute(Name = "person_id")] int personId, ActorRequestForUpdate actor)
         {
 

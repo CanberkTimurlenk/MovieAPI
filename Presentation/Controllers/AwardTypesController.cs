@@ -21,7 +21,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        [Route("get/{award_type_id:int}")]
+        [Route("{award_type_id:int}")]
         public IActionResult FindByIdAsync([FromRoute(Name = "award_type_id")] int awardTypeId)
         {
             _serviceManager.AwardTypeService.FindByIdAsync(awardTypeId);
@@ -29,7 +29,7 @@ namespace Presentation.Controllers
         }
 
         [HttpDelete]
-        [Route("delete/{award_type_id:int}")]
+        [Route("{award_type_id:int}")]
         public IActionResult DeleteByIdAsync([FromRoute(Name = "award_type_id")] int awardTypeId)
         {
             _serviceManager.AwardTypeService.DeleteByIdAsync(awardTypeId);
@@ -45,7 +45,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPatch]
-        [Route("update/{award_type_id:int}")]
+        [Route("{award_type_id:int}")]
         public async Task<IActionResult> PartiallyUpdateAsync([FromRoute(Name = "award_type_id")] int awardTypeId, [FromBody] JsonPatchDocument<AwardTypeRequestForUpdate> awardType)
         {
             var patchData = await _serviceManager.AwardTypeService.GetAwardTypeForPatch(awardTypeId);
@@ -58,7 +58,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPut]
-        [Route("update/{award_type_id:int}")]
+        [Route("{award_type_id:int}")]
         public async Task<IActionResult> UpdateAsync([FromRoute(Name = "award_type_id")] int awardTypeId, AwardTypeRequestForUpdate awardTypeRequestForUpdate)
         {
 

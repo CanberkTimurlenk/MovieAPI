@@ -21,7 +21,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        [Route("get/{award_type_id:int}/{movie_id:int}")]
+        [Route("{award_type_id:int}/{movie_id:int}")]
         public IActionResult GetByIdAsync([FromRoute(Name = "award_type_id")] int awardTypeId, [FromRoute(Name = "movie_Id")] int movieId)
         {
             _serviceManager.AwardService.FindByIdAsync(awardTypeId, movieId);
@@ -29,7 +29,7 @@ namespace Presentation.Controllers
         }
 
         [HttpDelete]
-        [Route("delete/{award_type_id:int}/{movie_id:int}")]
+        [Route("{award_type_id:int}/{movie_id:int}")]
         public IActionResult DeleteByIdAsync([FromRoute(Name = "award_type_id")] int awardTypeId, [FromRoute(Name = "movie_Id")] int movieId)
         {
             _serviceManager.AwardService.DeleteByIdAsync(awardTypeId, movieId);
@@ -45,7 +45,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPut]
-        [Route("update/{award_type_id:int}/{movie_id:int}")]
+        [Route("{award_type_id:int}/{movie_id:int}")]
         public async Task<IActionResult> UpdateAwardByAwardIdAndMovieIdAsync([FromRoute(Name = "award_id")] int awardId, [FromRoute(Name = "movie_id")] int movieId, AwardRequestForUpdate awardRequestForUpdate)
         {
 

@@ -19,7 +19,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        [Route("get/{language_id:int}")]
+        [Route("{language_id:int}")]
         public IActionResult GetByLanguageByIdAsync([FromRoute(Name = "language_id")] int languageId)
         {
             _serviceManager.LanguageService.FindByIdAsync(languageId);
@@ -39,7 +39,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPatch]
-        [Route("update/{language_id:int}")]
+        [Route("{language_id:int}")]
         public async Task<IActionResult> PartiallyUpdateAsync([FromRoute(Name = "language_id")] int languageId, [FromBody] JsonPatchDocument<LanguageRequestForUpdate> language)
         {
             var patchData = await _serviceManager.LanguageService.GetLanguageForPatchAsync(languageId);
@@ -52,7 +52,7 @@ namespace Presentation.Controllers
         }
 
         [HttpDelete]
-        [Route("delete/{language_id:int}")]
+        [Route("{language_id:int}")]
         public IActionResult Delete([FromRoute(Name = "language_id")] int languageId)
         {
             _serviceManager.LanguageService.DeleteByIdAsync(languageId);
@@ -63,7 +63,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPut]
-        [Route("update/{language_id:int}")]
+        [Route("{language_id:int}")]
         public async Task<IActionResult> UpdateAsync([FromRoute(Name = "language_id")] int languageId, LanguageRequestForUpdate language)
         {
 

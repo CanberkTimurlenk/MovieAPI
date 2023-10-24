@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Services.Abstract;
 using Services.Concrete;
 using Models.Concrete.RequestModels.Update.MovieDetailRequestForUpdate;
 using Models.Concrete.RequestModels.Update.Actor;
+using Services.Abstract;
 
 namespace Presentation.Controllers
 {
@@ -21,7 +21,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        [Route("get/{movie_id:int}")]
+        [Route("{movie_id:int}")]
         public IActionResult GetByIdAsync([FromRoute(Name = "movie_id")] int movieId)
         {
             _serviceManager.MovieDetailService.FindByIdAsync(movieId);
@@ -29,7 +29,7 @@ namespace Presentation.Controllers
         }
 
         [HttpDelete]
-        [Route("delete/{movie_id:int}")]
+        [Route("{movie_id:int}")]
         public IActionResult DeleteByIdAsync([FromRoute(Name = "movie_id")] int movieId)
         {
             _serviceManager.MovieDetailService.DeleteByIdAsync(movieId);
@@ -44,7 +44,7 @@ namespace Presentation.Controllers
             return StatusCode(201);
         }
 
-        [HttpPatch("update-movie-details/{movie_id:int}")]
+        [HttpPatch("{movie_id:int}")]
         public async Task<IActionResult> ReplaceMovieDetailByMovieId([FromRoute(Name = "movie_id")] int movieId, JsonPatchDocument<MovieDetailRequestForUpdate> movieDetail)
         {
             if (!movieDetail.Operations.All(op => op.OperationType == OperationType.Replace))
@@ -60,7 +60,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPut]
-        [Route("update/{person_id:int}")]
+        [Route("{person_id:int}")]
         public async Task<IActionResult> UpdateAsync([FromRoute(Name = "movie_id")] int movieId, MovieDetailRequestForUpdate movieDetail)
         {
 

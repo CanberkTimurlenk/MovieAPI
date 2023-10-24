@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Models.Concrete.RequestModels.Update.Director;
-using Services.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +10,7 @@ using System.Threading.Tasks;
 using Models.Concrete.RequestModels.Insertion.Person;
 using Models.Concrete.Entities;
 using Models.Concrete.RequestModels.Update.Actor;
+using Services.Abstract;
 
 namespace Presentation.Controllers
 {
@@ -25,7 +25,7 @@ namespace Presentation.Controllers
             _serviceManager = serviceManager;
         }
 
-        [HttpPost("add/{person_id:int}")]
+        [HttpPost("{person_id:int}")]
         public async Task<IActionResult> AddDirectorInformationAsync([FromRoute(Name = "person_id")] int personId, [FromBody] DirectorRequestForInsertion directorRequestForInsertion)
         {
             await _serviceManager.DirectorService.CreateDirectorInformationAsync(personId, directorRequestForInsertion);
@@ -34,7 +34,7 @@ namespace Presentation.Controllers
         }
 
 
-        [HttpGet("get/{person_id:int}")]
+        [HttpGet("{person_id:int}")]
         public async Task<IActionResult> AddDirectorInformationByPersonIdAsync([FromRoute(Name = "person_id")] int personId, DirectorRequestForInsertion directorRequestForInsertion)
         {
             await _serviceManager.DirectorService.CreateDirectorInformationAsync(personId, directorRequestForInsertion);
@@ -42,7 +42,7 @@ namespace Presentation.Controllers
             return Ok();     //  Ok
         }
 
-        [HttpDelete("delete/{person_id:int}")]
+        [HttpDelete("{person_id:int}")]
         public async Task<IActionResult> DeleteDirectorInformationByIdAsync([FromRoute(Name = "person_id")] int personId)
         {
             await _serviceManager.DirectorService.DeleteDirectorInformationAsync(personId);
@@ -50,7 +50,7 @@ namespace Presentation.Controllers
             return StatusCode(204);     //  No Content
         }
 
-        [HttpPatch("update/{person_id:int}")]
+        [HttpPatch("{person_id:int}")]
         public async Task<IActionResult> ReplaceDirectorInformationByPersonId([FromRoute] int personId, JsonPatchDocument<DirectorRequestForUpdate> director)
         {
             if (!director.Operations.All(op => op.OperationType == OperationType.Replace))
@@ -66,7 +66,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPut]
-        [Route("update/{person_id:int}")]
+        [Route("{person_id:int}")]
         public async Task<IActionResult> UpdateDirectorInformationByPersonIdAsync([FromRoute(Name = "person_id")] int personId, DirectorRequestForUpdate director)
         {
 

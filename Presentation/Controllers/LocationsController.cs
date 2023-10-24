@@ -19,7 +19,7 @@ namespace Presentation.Controllers
         }
 
         [HttpGet]
-        [Route("get/{location_id:int}")]
+        [Route("{location_id:int}")]
         public IActionResult GetByLocationByIdAsync([FromRoute(Name = "location_id")] int locationId)
         {
             _serviceManager.LocationService.FindByIdAsync(locationId);
@@ -38,7 +38,7 @@ namespace Presentation.Controllers
         }
 
         [HttpDelete]
-        [Route("delete/{location_id:int}")]
+        [Route("{location_id:int}")]
         public IActionResult Delete([FromRoute(Name = "location_id")] int locationId)
         {
             _serviceManager.LocationService.DeleteByIdAsync(locationId);
@@ -49,7 +49,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPatch]
-        [Route("update/{location_id:int}")]
+        [Route("{location_id:int}")]
         public async Task<IActionResult> PartiallyUpdateAsync([FromRoute(Name = "location_id")] int locationId, [FromBody] JsonPatchDocument<LocationRequestForUpdate> location)
         {
             var patchData = await _serviceManager.LocationService.GetLocationForPatchAsync(locationId);
@@ -62,7 +62,7 @@ namespace Presentation.Controllers
         }
 
         [HttpPut]
-        [Route("update/{location_id:int}")]
+        [Route("{location_id:int}")]
         public async Task<IActionResult> UpdateAsync([FromRoute(Name = "location_id")] int locationId, LocationRequestForUpdate location)
         {
 
