@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Models.Concrete.Domain;
 using Models.Concrete.Entities;
 using Models.Concrete.RequestModels.Insertion.Award;
 using Models.Concrete.RequestModels.Insertion.Genre;
@@ -6,6 +7,7 @@ using Models.Concrete.RequestModels.Insertion.Language;
 using Models.Concrete.RequestModels.Insertion.Location;
 using Models.Concrete.RequestModels.Insertion.Movie;
 using Models.Concrete.RequestModels.Insertion.Person;
+using Models.Concrete.RequestModels.Insertion.User;
 using Models.Concrete.RequestModels.Update.Award;
 using Models.Concrete.RequestModels.Update.AwardType;
 using Models.Concrete.RequestModels.Update.Genre;
@@ -67,7 +69,7 @@ namespace WebApi.Utilities.AutoMapper
             CreateMap<MovieDetailRequestForInsertion, MovieDetail>()
                 .ForMember(src => src.Movie, opt => opt.Ignore());
 
-
+            CreateMap<UserForRegisterRequest, User>();
 
             CreateMap<Movie, MovieResponse>();
             CreateMap<Movie, MovieWithAwardsResponse>();
