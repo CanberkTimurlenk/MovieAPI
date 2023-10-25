@@ -1,4 +1,4 @@
-# MovieApp
+# MovieAPI
 
 Movieapp is a TMDB like Api Project. TMDB stands for The Movie Database which built as movie and TV database and has an api.
 
