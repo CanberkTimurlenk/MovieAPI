@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.IdentityModel.Tokens;
 using Models.Concrete.Entities;
 using Models.Concrete.RequestFeatures;
 using Models.Concrete.RequestModels.Insertion.Movie;
@@ -9,7 +8,6 @@ using Repositories.Abstract;
 using Services.Abstract;
 using Services.Aspects.Caching;
 using Services.CrossCuttingConcerns.Caching.Abstract;
-using System.Collections;
 
 namespace Services.Concrete
 {
@@ -45,7 +43,6 @@ namespace Services.Concrete
 
         public async Task<(IEnumerable<MovieResponse> movies, MetaData metaData)> GetAllMoviesAsync(MovieParameters requestParameters)
         {
-
             var movies = await _repositoryManager.Movie.GetAllMoviesAsync(m => true, requestParameters, false);
 
             return (_mapper.Map<IEnumerable<MovieResponse>>(movies), movies.MetaData);
