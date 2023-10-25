@@ -9,7 +9,7 @@ namespace Services.Utilities.Interceptors
         protected virtual void OnException(IInvocation invocation, Exception ex) { }
         protected virtual void OnSuccess(IInvocation invocation) { }
 
-        public override void Intercept(IInvocation invocation)
+        public async override void Intercept(IInvocation invocation)
         {
             var isSuccess = true;
 
@@ -18,12 +18,12 @@ namespace Services.Utilities.Interceptors
             try
             {
                 invocation.Proceed();
+                await (Task)invocation.ReturnValue;
             }
             catch (Exception ex)
             {
                 isSuccess = false;
                 OnException(invocation, ex);
-                throw;
             }
             finally
             {
