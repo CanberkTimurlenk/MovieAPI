@@ -1,12 +1,11 @@
 # MovieAPI
 
 MovieAPI is an API project developed for educational purposes and similar to the API used by TMDB. 
-TMDB stands for 'The Movie Database' which is built as a user-editable movie and TV database and also provides an API."
+TMDB stands for 'The Movie Database' which is built as a user-editable movie and TV database and also provides an API.
 
 <br>
 
-I have created a scenario to reinforce what I have learned. It will work similarly to the API developed by TMDB. The API Developed could provide information about movies, including details about the movie's budget, information about the actors appearing in the movie, the genres in which the actors have played and much more.
-The JSON data produced as a response is eligible to be consumed by various front end technologies such as mobile apps, Angular, Vue.js, React etc. or another API.
+I have created a scenario to reinforce what I have learned in my software development education. It will work similarly to the API developed by TMDB. The API will provide information about movies, including the details about the movie's budget, information about the actors appearing in the movie, the genres in which the actors have played or vice versa, and even more data. The JSON data produced as a response is eligible to be consumed by various front end technologies such as mobile apps, Angular, Vue.js, React etc. and/or another API.
 
 <br>
 
