@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.Extensions.Logging;
 using Models.Concrete.ErrorDetails;
-using Models.Concrete.Exceptions;
+using Models.Concrete.Exceptions.Common;
 
 namespace WebApi.Extensions
 {
@@ -21,11 +20,9 @@ namespace WebApi.Extensions
                         context.Response.StatusCode = contextFeature.Error switch
                         {
                             NotFoundException => StatusCodes.Status404NotFound,
+                            UnauthorizedException => StatusCodes.Status401Unauthorized,
                             _ => StatusCodes.Status500InternalServerError
                         };
-
-
-
 
 
                         var errorDetails = new ErrorDetails()
@@ -34,7 +31,7 @@ namespace WebApi.Extensions
                             Message = contextFeature.Error.Message
                         };
 
-
+                        
                         await context.Response.WriteAsync(errorDetails.ToString());
                     }
                 });
