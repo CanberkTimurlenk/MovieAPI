@@ -1,9 +1,7 @@
 ﻿using Repositories.Concrete.EFCore.Contexts;
 using Microsoft.EntityFrameworkCore;
-using Services.Abstract;
-using Repositories.Abstract;
-using Repositories.Concrete.EFCore;
-using Services.Concrete;
+using Services.DependencyResolvers.Autofac.CoreModule;
+using Services.DependencyResolvers.Extensions;
 
 namespace WebApi.Extensions
 {
@@ -21,6 +19,11 @@ namespace WebApi.Extensions
                 options.Configuration = configuration.GetConnectionString("redisConn");
                 options.InstanceName = "MovieCatalog";
             });
+        }
+
+        public static void ConfigureAspects(this IServiceCollection services)
+        {
+            services.AddDependencyResolvers(new IAspectModule[] { new AspectModule() });
         }
     }
 }
