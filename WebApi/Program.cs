@@ -1,4 +1,6 @@
+using AspNetCoreRateLimit;
 using Presentation.AssemblyReference;
+using Serilog;
 using WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,9 +30,13 @@ builder.Services.ConfigureIdentity();
 builder.Services.ConfigureJwt(builder.Configuration);
 builder.Services.AddHttpContextAccessor();
 
+builder.Host.UseSerilog();
 
 builder.Services.ConfigureRateLimitingOptions(builder.Configuration);
 
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .CreateLogger();
 
 var app = builder.Build();
 
