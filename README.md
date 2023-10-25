@@ -1,19 +1,18 @@
 # MovieAPI
 
-MovieAPI is an API project to developed for educational purposes and similar to the API used by TMDB. 
-TMDB stands for "The Movie Database" which built as user editable movie and TV database and has also an API.
-
-
-<br>
-
-I have created a scenario to reinforce what I have learned. It will work similarly to the API developed by TMDB. My API will provide information about movies, including details about the movie's budget, information about the actors appearing in the movie, the genres in which the actors have played or vice versa and even more data.
-This JSON data is eligible to be consumed by various front end technologies such as mobile apps, Angular, Vue.js, React etc. or another API.
+MovieAPI is an API project developed for educational purposes and similar to the API used by TMDB. 
+TMDB stands for 'The Movie Database' which is built as a user-editable movie and TV database and also provides an API."
 
 <br>
 
-* The software was written in C#
-* ASP.NET Web API framework was used to create a Restful Api.
-* CLEAN Code Techniques and SOLID Principles was followed during development process.
+I have created a scenario to reinforce what I have learned. It will work similarly to the API developed by TMDB. The API Developed could provide information about movies, including details about the movie's budget, information about the actors appearing in the movie, the genres in which the actors have played and much more.
+The JSON data produced as a response is eligible to be consumed by various front end technologies such as mobile apps, Angular, Vue.js, React etc. or another API.
+
+<br>
+
+* The project was written in C#
+* ASP.NET Web API framework was used to create a RESTful Api.
+* CLEAN Code Techniques and SOLID Principles were followed during development process.
 
 <br>
 <hr>
@@ -21,20 +20,26 @@ This JSON data is eligible to be consumed by various front end technologies such
 
 # Software Design
 
-### Arhitecture
+### Architecture
 N Tier Architecture has been impelemented.
 
 ### Database
-PostgreSQL was used as database. Triggers has been also added from migrations.
+PostgreSQL was used as database. Triggers has been also added through migrations.
 
 ### Global Exception Handler
-Global exception handling middleware was added to centralize exception handling. Custom Exceptions was created.
+Global exception handling middleware was added to centralize exception management. Custom Exceptions was created.
 
-### Aspect Oriented Programming
-To exceed seperation of cross cutting concers from the existed service logic, aspect oriented programming is a well-known technique.
-Interceptors was used to clearize service logic from the cross cutting concerns. Concers was thought and applied as aspect attributes
+### Aspect-Oriented Programming
+To exceed seperation of cross cutting concerns from the existed service logic, Aspect-Oriented programming is a well-known technique.
+Interceptors was used to clearize service logic from the cross cutting concerns. Concerns was thought and applied as aspect attributes
 
-Although Log Aspect and Cache Aspect was initially implemented initially, Other Aspect could be added easily into existed structure.
+Although Log Aspect and Cache Aspect were implemented initially, Other Aspect could be added easily into existed structure.
+
+### Pagination
+PageSize and Index could be passed from the query string. The response will be include Page size, Count and Next/Previous Page flag in its header.
+
+### Sort By Query
+Requested data could be sorted from the query string
 
 <br>
 <hr>
@@ -46,7 +51,7 @@ Although Log Aspect and Cache Aspect was initially implemented initially, Other 
 <ul>
   <li>
     <h3>Serilog</h3>
-    <p><strong>Serilog</strong> was used as Logger. The logger could be used alone or as an aspect both. Global Exception Handling also has includes logging.</p>
+    <p><strong>Serilog</strong> was used as Logger. The logger could be used alone or as an aspect both. Global Exception Handling also includes logging.</p>
   </li>
   <li>
     <h3>SEQ</h3>
