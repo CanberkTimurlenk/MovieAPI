@@ -1,9 +1,4 @@
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
 using Presentation.AssemblyReference;
-using Services.DependencyResolvers.Autofac;
-using Services.DependencyResolvers.Autofac.CoreModule;
-using Services.DependencyResolvers.Extensions;
 using WebApi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,16 +18,21 @@ builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.ConfigureRedis(builder.Configuration);
 
-builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-builder.Host.ConfigureContainer<ContainerBuilder>(builder => builder.RegisterModule(new ServiceModule()));
-builder.Services.AddDependencyResolvers(new IAspectModule[] { new AspectModule() });
+builder.Host.ConfigureAutofac(builder.Configuration);
+builder.Services.ConfigureAspects();
+
+builder.Services.AddAuthentication();
+builder.Services.ConfigureIdentity();
+
+
+builder.Services.ConfigureJwt(builder.Configuration);
+builder.Services.AddHttpContextAccessor();
 
 
 
 
 var app = builder.Build();
 
-app.ConfigureExceptionHandler();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -41,8 +41,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+if (app.Environment.IsProduction())
+    app.ConfigureExceptionHandler();
+
 app.UseHttpsRedirection();
 
+
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
