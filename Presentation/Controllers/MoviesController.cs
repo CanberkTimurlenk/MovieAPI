@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Models.Concrete.RequestFeatures;
 using System.Text.Json;
-using Services.Abstract;
 using Models.Concrete.ResponseModels.Movie;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.JsonPatch.Operations;
 using Models.Concrete.RequestModels.Update.Movie;
 using Models.Concrete.RequestModels.Insertion.Movie;
+using Services.Abstract;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Presentation.Controllers
 {
@@ -39,7 +40,8 @@ namespace Presentation.Controllers
 
         }
 
-        [HttpGet("get-all")]
+        [Authorize(Roles = "User")]
+        [HttpGet("all")]
         public async Task<IActionResult> GetAllMoviesAsync([FromQuery] MovieParameters requestParamaters)
         {
             var result = await _serviceManager.MovieService.GetAllMoviesAsync(requestParamaters);
@@ -48,7 +50,7 @@ namespace Presentation.Controllers
         }
 
 
-        [HttpGet("get-by-release-status")]
+        [HttpGet("release-status")]
         public async Task<IActionResult> GetMoviesByReleaseStatusAsync(bool isReleased, [FromQuery] MovieParameters requestParameters)
         {
             var result = await _serviceManager.MovieService.GetMoviesByReleaseStatusAsync(isReleased, requestParameters);
@@ -56,7 +58,7 @@ namespace Presentation.Controllers
             return CreatePaginatedResponse(result);
         }
 
-        [HttpGet("get/{genre_id:int}")]
+        [HttpGet("genre/{genre_id:int}")]
         public async Task<IActionResult> GetMoviesByGenreIdAsync([FromRoute(Name = "genre_id")] int genreId, [FromQuery] MovieParameters requestParamaters)
         {
             var result = await _serviceManager.MovieService.GetMoviesByGenreIdAsync(genreId, requestParamaters);
@@ -64,7 +66,7 @@ namespace Presentation.Controllers
             return CreatePaginatedResponse(result);
         }
 
-        [HttpGet("get/{movie_id:int}")]
+        [HttpGet("{movie_id:int}")]
         public async Task<IActionResult> FindByIdAsync([FromRoute(Name = "movie_id")] int movieId)
         {
             var movie = await _serviceManager.MovieService.FindByIdAsync(movieId);
@@ -73,7 +75,7 @@ namespace Presentation.Controllers
 
         }
 
-        [HttpGet("get-by-duration-range")]
+        [HttpGet("duration-range")]
         public async Task<IActionResult> GetMoviesByDurationIntervalAsync(int minDuration, int maxDuration, [FromQuery] MovieParameters requestParamaters)
         {
             var result = await _serviceManager.MovieService.GetMoviesByDurationIntervalAsync(minDuration, maxDuration, requestParamaters);
@@ -83,7 +85,7 @@ namespace Presentation.Controllers
 
         }
 
-        [HttpGet("get-with-details/{movie_id:int}")]
+        [HttpGet("with-details/{movie_id:int}")]
         public async Task<IActionResult> GetMovieWithDetailsByMovieId([FromRoute(Name = "movie_id")] int movieId)
         {
             var movie = await _serviceManager.MovieService.GetMovieWithDetailsByMovieId(movieId);
@@ -92,7 +94,7 @@ namespace Presentation.Controllers
 
         }
 
-        [HttpGet("get/{person_id:int}")]
+        [HttpGet("person/{person_id:int}")]
         public async Task<IActionResult> GetMoviesByPersonIdAsync([FromRoute(Name = "person_id")] int personId, [FromQuery] MovieParameters requestParamaters)
         {
             var result = await _serviceManager.MovieService.GetMoviesByPersonId(personId, requestParamaters);
@@ -101,7 +103,7 @@ namespace Presentation.Controllers
 
         }
 
-        [HttpGet("get-by-location-name")]
+        [HttpGet("location/location-name")]
         public async Task<IActionResult> GetMoviesByLocationNameAsync([FromQuery] string locationName, [FromQuery] MovieParameters requestParamaters)
         {
             var result = await _serviceManager.MovieService.GetMoviesByLocationNameAsync(locationName, requestParamaters);
@@ -113,7 +115,7 @@ namespace Presentation.Controllers
 
 
 
-        [HttpDelete("delete/{movie_id:int}")]
+        [HttpDelete("{movie_id:int}")]
         public async Task<IActionResult> DeleteByIdAsync([FromRoute] int movieId)
         {
             await _serviceManager.MovieService.DeleteByIdAsync(movieId);
@@ -122,7 +124,7 @@ namespace Presentation.Controllers
 
         }
 
-        [HttpDelete("delete/{movie_id:int}/genres")]
+        [HttpDelete("{movie_id:int}/genres")]
         public async Task<IActionResult> PartiallyDeleteMovieGenreAsync([FromRoute(Name = "movie_id")] int movieId, [FromBody] IEnumerable<int> genreIdsToDelete)
         {
             await _serviceManager.MovieService.DeleteRangeMovieGenresAsync(movieId, genreIdsToDelete);
@@ -130,7 +132,7 @@ namespace Presentation.Controllers
             return StatusCode(204);     //  No Content
         }
 
-        [HttpDelete("delete/{movie_id:int}/persons")]
+        [HttpDelete("{movie_id:int}/persons")]
         public async Task<IActionResult> PartiallyDeleteMoviePersonAsync([FromRoute(Name = "movie_id")] int movieId, [FromBody] IEnumerable<int> personIdsToDelete)
         {
             await _serviceManager.MovieService.DeleteRangeMoviePersonsAsync(movieId, personIdsToDelete);
@@ -138,7 +140,7 @@ namespace Presentation.Controllers
             return StatusCode(204);     //  No Content
         }
 
-        [HttpDelete("delete/{movie_id:int}/languages")]
+        [HttpDelete("{movie_id:int}/languages")]
         public async Task<IActionResult> PartiallyDeleteMovieLanguageAsync([FromRoute(Name = "movie_id")] int movieId, [FromBody] IEnumerable<int> languageIdsToDelete)
         {
             await _serviceManager.MovieService.DeleteRangeMovieLanguagesAsync(movieId, languageIdsToDelete);
@@ -146,7 +148,7 @@ namespace Presentation.Controllers
             return StatusCode(204);     //  No Content
         }
 
-        [HttpDelete("delete-unreleased")]
+        [HttpDelete("unreleased")]
         public async Task<IActionResult> DeleteUnreleasedMoviesAsync()
         {
             var deletedCount = await _serviceManager.MovieService.ExecuteDeleteUnreleased();
@@ -164,7 +166,7 @@ namespace Presentation.Controllers
 
         }
 
-        [HttpPost("add/{movie_id:int}/genres")]
+        [HttpPost("{movie_id:int}/genres")]
         public async Task<IActionResult> AddMovieGenreAsync([FromRoute(Name = "movie_id")] int movieId, [FromBody] IEnumerable<int> genreIdsToAdd)
         {
             await _serviceManager.MovieService.AddRangeMovieGenresAsync(movieId, genreIdsToAdd);
@@ -172,7 +174,7 @@ namespace Presentation.Controllers
             return StatusCode(204);     //  No Content
         }
 
-        [HttpPost("add/{movie_id:int}/persons")]
+        [HttpPost("{movie_id:int}/persons")]
         public async Task<IActionResult> AddMoviePersonAsync([FromRoute(Name = "movie_id")] int movieId, [FromBody] IEnumerable<int> personIdsToAdd)
         {
             await _serviceManager.MovieService.AddRangeMoviePersonsAsync(movieId, personIdsToAdd);
@@ -180,7 +182,7 @@ namespace Presentation.Controllers
             return StatusCode(204);     //  No Content
         }
 
-        [HttpPost("add/{movie_id:int}/languages")]
+        [HttpPost("{movie_id:int}/languages")]
         public async Task<IActionResult> AddMovieLanguageAsync([FromRoute(Name = "movie_id")] int movieId, [FromBody] IEnumerable<int> languageIdsToAdd)
         {
             await _serviceManager.MovieService.AddRangeMovieLanguagesAsync(movieId, languageIdsToAdd);
@@ -188,7 +190,7 @@ namespace Presentation.Controllers
             return StatusCode(204);     //  No Content
         }
 
-        [HttpPatch("update/{movie_id:int}/genres/{genre_id:int}")]
+        [HttpPatch("{movie_id:int}/genres/{genre_id:int}")]
         public async Task<IActionResult> ReplaceMovieGenreAsync([FromRoute(Name = "movie_id")] int movieId, [FromRoute(Name = "genre_id")] int genreId, [FromBody] JsonPatchDocument<MovieGenreRequestForUpdate> moviePatch)
         {
             if (!moviePatch.Operations.All(op => op.OperationType == OperationType.Replace))
@@ -209,7 +211,7 @@ namespace Presentation.Controllers
             return StatusCode(204);     //  No Content
         }
 
-        [HttpPatch("update/{movie_id:int}/persons/{person_id:int}")]
+        [HttpPatch("{movie_id:int}/persons/{person_id:int}")]
         public async Task<IActionResult> ReplaceMoviePersonAsync([FromRoute(Name = "movie_id")] int movieId, [FromRoute(Name = "person_id")] int personId, [FromBody] JsonPatchDocument<MoviePersonRequestForUpdate> moviePatch)
         {
             if (!moviePatch.Operations.All(op => op.OperationType == OperationType.Replace))
@@ -230,7 +232,7 @@ namespace Presentation.Controllers
             return StatusCode(204);     //  No Content
         }
 
-        [HttpPatch("update/{movie_id:int}/languages/{language_id:int}")]
+        [HttpPatch("{movie_id:int}/languages/{language_id:int}")]
         public async Task<IActionResult> ReplaceMovieLanguageAsync([FromRoute(Name = "movie_id")] int movieId, [FromRoute(Name = "language_id")] int languageId, [FromBody] JsonPatchDocument<MovieLanguageRequestForUpdate> moviePatch)
         {
             if (!moviePatch.Operations.All(op => op.OperationType == OperationType.Replace))
