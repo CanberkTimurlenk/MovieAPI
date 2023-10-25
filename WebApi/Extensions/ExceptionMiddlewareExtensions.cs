@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Models.Concrete.ErrorDetails;
 using Models.Concrete.Exceptions.Common;
+using Serilog;
 
 namespace WebApi.Extensions
 {
@@ -31,8 +32,10 @@ namespace WebApi.Extensions
                             Message = contextFeature.Error.Message
                         };
 
-                        
+                        Log.Error("error during executing {@RequestPath} {@Error}", context.Request.Path.Value, contextFeature.Error);
+                        Log.CloseAndFlush();
                         await context.Response.WriteAsync(errorDetails.ToString());
+
                     }
                 });
             });
