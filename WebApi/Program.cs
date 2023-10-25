@@ -29,6 +29,7 @@ builder.Services.ConfigureJwt(builder.Configuration);
 builder.Services.AddHttpContextAccessor();
 
 
+builder.Services.ConfigureRateLimitingOptions(builder.Configuration);
 
 
 var app = builder.Build();
@@ -46,7 +47,7 @@ if (app.Environment.IsProduction())
 
 app.UseHttpsRedirection();
 
-
+app.UseIpRateLimiting();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 app.UseAuthentication();
