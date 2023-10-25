@@ -1,10 +1,12 @@
 # MovieAPI
 
-MovieAPI is a TMDB-like API Project. TMDB stands for The Movie Database which built as movie and TV database and has an api.
+MovieAPI is an API project to developed for educational purposes and similar to the API used by TMDB. 
+TMDB stands for "The Movie Database" which built as user editable movie and TV database and has also an API.
+
 
 <br>
 
-I've created a scenario to reinforce what I've learned. It will work similarly to the API developed by TMDB. My API will provide information about movies, including details about the movie's budget, information about the actors appearing in the movie, the genres in which the actors have played or vice versa and even more data.
+I have created a scenario to reinforce what I have learned. It will work similarly to the API developed by TMDB. My API will provide information about movies, including details about the movie's budget, information about the actors appearing in the movie, the genres in which the actors have played or vice versa and even more data.
 This JSON data is eligible to be consumed by various front end technologies such as mobile apps, Angular, Vue.js, React etc. or another API.
 
 <br>
@@ -44,12 +46,12 @@ Although Log Aspect and Cache Aspect was initially implemented initially, Other 
 <ul>
   <li>
     <h3>Serilog</h3>
-    <p>Serilog was used as Logger. The logger could be used alone or as an aspect both. Global Exception Handling also has also includes logging.</p>
+    <p><strong>Serilog</strong> was used as Logger. The logger could be used alone or as an aspect both. Global Exception Handling also has includes logging.</p>
   </li>
   <li>
     <h3>SEQ</h3>
-    <p>Logging is an effective way to manage monitoring, troubleshooting, and debugging process. However, when it used directly and single-handed the management will be rough to overcome. <strong>SEQ</strong> is self-hosted search, analysis, and alerting server built for structured log data.</p>
-    <p>Exception Handler, Logger, and SEQ work in collaboration.</p>
+    <p>Logging is an effective way to manage the monitoring, troubleshooting, and debugging process. However, when it's used directly and single-handedly the management will be rough to overcome. <strong>SEQ</strong> is a self-hosted search, analysis, and alerting server built for structured log data.</p>
+    <p>Exception Handler, Logger, and <strong>SEQ</strong> work in collaboration.</p>
   </li>
   <li>
     <h3>Redis</h3>
@@ -65,11 +67,11 @@ Although Log Aspect and Cache Aspect was initially implemented initially, Other 
   </li>
   <li>
     <h3>ASP.NET Identity</h3>
-    <p>ASP.NET is an API which could manages users, passwords, roles, claims, tokens, email confirmation, and more.</p>
+    <p><strong>ASP.NET Identity</strong> is an API which could manages users, passwords, roles, claims, tokens, email confirmation, and more.</p>
   </li>
   <li>
     <h3>Autofac DI Container</h3>
-    <p>Autofac works as IoC container and The Autofac.Extras.DynamicProxy integration package enables method calls on Autofac components to be intercepted by other components. </p>
+    <p><strong>Autofac</strong> works as IoC container and The Autofac.Extras.DynamicProxy integration package enables method calls on Autofac components to be intercepted by other components. </p>
   </li>
 </ul>
 
