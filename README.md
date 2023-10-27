@@ -1,7 +1,7 @@
 # MovieAPI
 
 MovieAPI is an API project developed for educational purposes and similar to the API used by TMDB. 
-TMDB stands for 'The Movie Database' which is built as a user-editable movie and TV database and also provides an API.
+TMDB stands for "The Movie Database" which is built as a user-editable movie and TV database and also provides an API.
 
 <br>
 
